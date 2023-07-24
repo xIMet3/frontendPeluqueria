@@ -3,7 +3,7 @@ import "./Home.css"
 
 
 export const Home = () => {
-    return (
-        <p>Hola</p>
-    )
+    // return (
+    //     <p>Hola</p>
+    // )
 }
