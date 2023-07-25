@@ -1,0 +1,13 @@
+.boton1Diseño {
+    cursor: pointer;
+}
+
+.boton1Diseño:hover {
+    scale: 1.15;
+    transition: 0.5s;
+    transition-delay: 0.1s;
+}
+
+.boton1Diseño:not(:hover) {
+    transition: 0.5s;
+}

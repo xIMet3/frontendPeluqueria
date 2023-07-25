@@ -4,6 +4,9 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { Boton1 } from "../Boton1/Boton1";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 
 
@@ -11,7 +14,9 @@ export const Header = () => {
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-dark navbar-dark">
   <Container>
-    <Navbar.Brand href="#home" className="text-light">React-Bootstrap</Navbar.Brand>
+    <Navbar.Brand >
+      <Boton1 path={"/"} name={"Johnson Exclusive"}  />
+    </Navbar.Brand>
     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
     <Navbar.Collapse id="responsive-navbar-nav">
       <Nav className="me-auto">
