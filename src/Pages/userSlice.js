@@ -8,7 +8,7 @@ export const userSlice = createSlice({
     },
     data: {
       name: "",
-      role: 3,
+      rol: 3,
     },
   },
 
@@ -20,7 +20,7 @@ export const userSlice = createSlice({
       },
         state.data = {
           name: payload.name,
-          role_id: payload.role_id,
+          rol_id: payload.rol_id,
           phone: payload.phone,
           email: payload.email,
         };
@@ -33,7 +33,7 @@ export const userSlice = createSlice({
         },
         data: {
           name: "",
-          role: "",
+          rol: "",
         },
       };
     },
