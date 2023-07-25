@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { Container, Row, Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import { registroUsuario } from "../../../Services/apiCalls";
 
 
 export const Register = () => {
@@ -21,12 +22,32 @@ export const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const inputHandler = ({ target }) => {
-    let { nombre, value } = target;
+    let { name, value } = target;
     setUser((prevState) => ({
       ...prevState,
-      [nombre]: value,
+      [name]: value,
     }));
+    console.log(usuario)
   };
+
+  const submitHandler = async (e) => {
+  e.preventDefault();
+  // Validar número de teléfono antes de enviarlo al backend
+  if (usuario.telefono.length !== 9) {
+    alert("Porfavor, introduce un número de telefono válido (9 digitos)");
+    return;
+  }
+  try {
+    const response = await registroUsuario(usuario);
+    // Aquí puedes manejar la respuesta del backend si es necesario
+    console.log(response);
+  } catch (error) {
+    // Manejo de errores en caso de que la solicitud falle
+    console.error("Error al registrar el usuario:", error);
+  }
+};
+
+  
 
   return (
     <>
@@ -38,7 +59,7 @@ export const Register = () => {
                 <Form.Label className="fw-bold">Nombre</Form.Label>
                 <Form.Control
                   type="name"
-                  name="name"
+                  name="nombre"
                   placeholder="Introduce tu nombre"
                   onChange={(e) => {
                     inputHandler(e);
@@ -83,8 +104,8 @@ export const Register = () => {
               <Form.Group className="mb-3" controlId="formBasicPostal">
                 <Form.Label className="fw-bold">Código postal</Form.Label>
                 <Form.Control
-                  type="name"
-                  name="codigoPostal"
+                  type="text"
+                  name="codigo_postal"
                   placeholder="Introduce tu código postal"
                   onChange={(e) => {
                     inputHandler(e);
@@ -96,7 +117,7 @@ export const Register = () => {
                 <Form.Label className="fw-bold">Contraseña</Form.Label>
                 <Form.Control
                   type="password"
-                  name="password"
+                  name="contraseña"
                   placeholder="Introduce tu contraseña"
                   onChange={(e) => {
                     inputHandler(e);
@@ -107,7 +128,7 @@ export const Register = () => {
                 variant="primary"
                 type="submit"
                 onClick={(e) => {
-                  submitHandler(e, user);
+                  submitHandler(e, usuario);
                 }}
               >
                 Enviar
