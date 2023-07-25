@@ -30,10 +30,10 @@ export const Header = () => {
       </Nav>
       <Nav>
         <Nav.Link className="text-light">
-          <Boton2 path={"/"} name={"Iniciar sesión"} />
+          <Boton2 path={"/login"} name={"Iniciar sesión"} />
         </Nav.Link>
         <Nav.Link className="text-light">
-          <Boton2 path={"/"} name={"Regístrate"} />
+          <Boton2 path={"/register"} name={"Regístrate"} />
         </Nav.Link>
         {/* <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
           <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
