@@ -1,0 +1,15 @@
+.boton2Diseño {
+    cursor: pointer;
+    margin-left: 2em;
+}
+
+.boton2Diseño:hover {
+    scale: 1.1;
+    transition: 0.4s;
+    transition-delay: 0.1s;
+    color: darkgoldenrod;
+}
+
+.boton2Diseño:not(:hover) {
+    transition: 0.2s;
+}
