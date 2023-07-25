@@ -45,7 +45,7 @@ export const Login = () => {
           <Col xs={10} md={6} className="">
             <Form className="h-100 d-flex flex-column align-items-center justify-content-center">
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email</Form.Label>
+                <Form.Label id="email">Email</Form.Label>
                 <Form.Control
                   type="email"
                   name="email"
@@ -56,7 +56,7 @@ export const Login = () => {
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Contraseña</Form.Label>
+                <Form.Label id="contraseña">Contraseña</Form.Label>
                 <Form.Control
                   type="password"
                   name="contraseña"
@@ -66,7 +66,7 @@ export const Login = () => {
                   }}
                 />
               </Form.Group>
-              <Button
+              <Button id="boton"
                 variant="primary"
                 type="submit"
                 onClick={(e) => {

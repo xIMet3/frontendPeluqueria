@@ -1,0 +1,23 @@
+.loginEntero {
+    width: 100vw;
+    height: auto;
+    min-height: 80vh;
+    background-image: url(../../../img/logoJohnson2.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+
+}
+
+#email {
+    color: white;
+    margin-top: 1em;
+}
+
+#contraseña {
+    color: white;
+}
+
+#boton {
+    background-color: grey;
+    border: 0;
+}
