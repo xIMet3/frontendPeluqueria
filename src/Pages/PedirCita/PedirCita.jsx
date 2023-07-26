@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { crearCita } from "../../../Services/apiCalls";
 import { userData } from "../userSlice";
+import { Button, Form } from "react-bootstrap";
 
 export const PedirCita = () => {
   // Obtiene las credenciales del usuario
@@ -18,6 +19,8 @@ export const PedirCita = () => {
   const [citasNoDisponibles, setCitasNoDisponibles] = useState(false);
   // Estado para almacenar las citas existentes
   const [citas, setCitas] = useState([]);
+  // Estado para controlar la visibilidad del modal
+  const [showModal, setShowModal] = useState(false);
   //Hook de enrutamiento para redireccionar despues de enviar el formulario
   const navigate = useNavigate();
   // Funcion para manejar el cambio de valor en los campos del formulario
@@ -81,42 +84,56 @@ export const PedirCita = () => {
     }
   };
 
+  return (
+    <div className="pedirCitaEntera">
+      <div className="formularioCita">
+        <h1>Concertar una Cita</h1>
+        <Form onSubmit={handleSubmit} id="formularioInputs">
+          {/* Espacio para la imagen */}
+          <div className="imagenFija" />
 
-return (
-  <div className="pedirCitaEntera">
-    
-  </div>
-);
+          {/* Input para elegir fecha y hora */}
+          <Form.Group id="inputFecha">
+            <Form.Label><strong>Fecha y hora</strong></Form.Label>
+            <Form.Control
+              type="datetime-local"
+              name="fecha"
+              onChange={inputHandler}
+            />
+          </Form.Group>
+
+          {/* Inputs para elegir empleado, servicio y comentario */}
+          <Form.Group id="inputEmpleado">
+            <Form.Label><strong>Empleado</strong></Form.Label>
+            <Form.Control
+              type="text"
+              name="empleado_id"
+              onChange={inputHandler}
+            />
+          </Form.Group>
+          <Form.Group id="inputServicio">
+            <Form.Label><strong>Servicio</strong></Form.Label>
+            <Form.Control
+              type="text"
+              name="servicio_id"
+              onChange={inputHandler}
+            />
+          </Form.Group>
+          <Form.Group id="inputComentario">
+            <Form.Label><strong>Comentario</strong></Form.Label>
+            <Form.Control
+              as="textarea"
+              name="comentario"
+              onChange={inputHandler}
+            />
+          </Form.Group>
+
+          <Button type="submit" id="botonConcertarCita">Concertar Cita</Button>
+        </Form>
+      </div>
+    </div>
+  );
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // const isAppointmentExist = appointments.find((appointment) => {
 //     const appointmentDate = new Date(appointment.date);
