@@ -110,6 +110,7 @@ export const PanelUsuario = () => {
 
       {/* Renderiza el modal si showModal es true */}
       {showModal && (
+        // Agregar la clase modalUsuario aquí para aplicar los estilos de superposición
         <div className="modalUsuario">
           <div className="modal-contenido">
             <span className="cerrar" onClick={handleCloseModal}>
