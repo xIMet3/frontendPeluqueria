@@ -1,6 +1,8 @@
 .boton1Diseño {
     cursor: pointer;
     font-size: x-large;
+    background-image: url(../../../img/iconoJohnson.png);
+    color: transparent;
 }
 
 .boton1Diseño:hover {

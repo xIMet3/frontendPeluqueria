@@ -3,7 +3,9 @@ import "./Home.css"
 
 
 export const Home = () => {
-    // return (
-    //     <p>Hola</p>
-    // )
+    return (
+        <div className="homeEntera">
+            
+        </div>
+    )
 }
