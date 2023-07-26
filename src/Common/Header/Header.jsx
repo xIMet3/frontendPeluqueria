@@ -28,7 +28,7 @@ export const Header = () => {
           <Boton2 path={"/"} name={"Servicios"} />
         </Nav.Link>
         <Nav.Link className="text-light">
-          <Boton2 path={"/"} name={"Concertar cita"} />
+          <Boton2 path={"/concertarCita"} name={"Concertar cita"} />
         </Nav.Link>
       </Nav>
       <Nav>

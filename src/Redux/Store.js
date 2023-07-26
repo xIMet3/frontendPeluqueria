@@ -14,7 +14,7 @@ const persistConfig = {
 // Se utiliza combineReducers para combinar los reducers individuales en uno solo. En este caso, solo se tiene
 // un reducer llamado user que proviene del archivo userSlice.
 const rootReducer = combineReducers({
-  user: userSlice,
+  usuario: userSlice,
 });
 
 // Se utiliza persistReducer para envolver el rootReducer con la configuración de persistencia especificada en

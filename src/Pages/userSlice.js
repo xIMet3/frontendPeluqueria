@@ -7,35 +7,34 @@ export const userSlice = createSlice({
       token: "",
     },
     data: {
-      name: "",
-      rol: 3,
+      nombre: "",
+      apellido: "",
+      email: "",
+      telefono: "",
+      codigo_postal: "",
+      rol_id: 3,
     },
   },
 
   reducers: {
     login: (state, action) => {
-      let { payload } = action;
-      state.credentials = {
-        token: payload.token,
-      },
-        state.data = {
-          name: payload.name,
-          rol_id: payload.rol_id,
-          phone: payload.phone,
-          email: payload.email,
-        };
+      const { payload } = action;
+      state.credentials.token = payload.token;
+      state.data.nombre = payload.nombre;
+      state.data.apellido = payload.apellido;
+      state.data.email = payload.email;
+      state.data.telefono = payload.telefono;
+      state.data.codigo_postal = payload.codigo_postal;
+      state.data.rol_id = payload.rol_id;
     },
     logout: (state) => {
-      return {
-        ...state,
-        credentials: {
-          token: "",
-        },
-        data: {
-          name: "",
-          rol: "",
-        },
-      };
+      state.credentials.token = "";
+      state.data.nombre = "";
+      state.data.apellido = "";
+      state.data.email = "";
+      state.data.telefono = "";
+      state.data.codigo_postal = "";
+      state.data.rol_id = 3;
     },
   },
 });
