@@ -27,6 +27,9 @@ export const Header = () => {
         <Nav.Link className="text-light">
           <Boton2 path={"/"} name={"Servicios"} />
         </Nav.Link>
+        <Nav.Link className="text-light">
+          <Boton2 path={"/"} name={"Concertar cita"} />
+        </Nav.Link>
       </Nav>
       <Nav>
         <Nav.Link className="text-light">

@@ -31,3 +31,14 @@ export const modificarUsuario = async (token, userData) => {
     return res.data;
     console.log(res.data);
 };
+
+// Solicitar una cita
+export const crearCita = async (token, citaData) => {
+    const res = await axios.post("http://localhost:3000/cita/solicitarCita", citaData,
+    {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    });
+    return res.data;
+}

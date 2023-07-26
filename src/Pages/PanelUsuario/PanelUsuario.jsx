@@ -18,6 +18,8 @@ export const PanelUsuario = () => {
     codigo_postal: "",
     contraseña: "",
   });
+  // Estado que controla el mensaje de error para el campo de contraseña
+  const [contraseñaError, setContraseñaError] = useState("");
 
   // Obtiene las credenciales del usuario desde el estado global
   const { credentials = {} } = useSelector((state) => state.user);
@@ -37,7 +39,7 @@ export const PanelUsuario = () => {
           email: userData.data?.email || "",
           telefono: userData.data?.telefono || "",
           codigo_postal: userData.data?.codigo_postal || "",
-          contraseña: "",
+          contraseña: "", // No mostrar la contraseña actual en el formulario
         });
       } catch (error) {
         console.error("Error al obtener los datos del usuario: ", error);
@@ -75,8 +77,19 @@ export const PanelUsuario = () => {
         email: formData.email,
         telefono: formData.telefono,
         codigo_postal: formData.codigo_postal,
-        contraseña: formData.contraseña,
       };
+
+      // Validamos la contraseña para que tenga al menos 6 caracteres
+      if (formData.contraseña && formData.contraseña.length >= 6) {
+        userDataToUpdate.contraseña = formData.contraseña;
+        setContraseñaError(""); // Reiniciamos el mensaje de error
+      } else if (formData.contraseña && formData.contraseña.length < 6) {
+        setContraseñaError("La contraseña debe tener al menos 6 caracteres");
+        return;
+      } else {
+        setContraseñaError("Introduzca su contraseña o su nueva contraseña");
+        return;
+      }
 
       // Llama a la API para actualizar los datos del usuario
       await modificarUsuario(credentials.token, userDataToUpdate);
@@ -97,7 +110,6 @@ export const PanelUsuario = () => {
       console.error("Error al guardar los cambios: ", error);
     }
   };
-
   return (
     <div className="panelUsuarioEntero">
       <div className="parteIzquierda">
@@ -161,6 +173,10 @@ export const PanelUsuario = () => {
                 value={formData.contraseña}
                 onChange={handleChange}
               />
+              {/* Mensaje de error para el campo de contraseña */}
+              {contraseñaError && (
+                <p className="error-message">{contraseñaError}</p>
+              )}
               {/* Boton para guardar los cambios */}
               <button type="button" onClick={handleSaveChanges}>
                 Guardar cambios
