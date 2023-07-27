@@ -60,8 +60,8 @@
 }
 
 .lista-grupo-objeto {
-    margin-top: 0.3em;
-  }
+  margin-top: 0.3em;
+}
 
 .modalUsuario {
   position: fixed;
@@ -92,7 +92,7 @@
 }
 
 .modal-contenido button {
-  background-color:coral ;
+  background-color: coral;
 }
 
 /* "x" de cerrar el modal */
@@ -137,9 +137,7 @@
   scale: 1.1;
 }
 
-/* Ajustar la card para ocupar toda la pantalla en pantallas pequeñas */
-/* Ajustar la card para ocupar toda la pantalla en pantallas pequeñas */
-/* Ajustar la card para ocupar toda la pantalla en pantallas pequeñas */
+/* Pantallas pequeñas */
 @media (max-width: 768px) {
   .panelUsuarioEntero {
     flex-direction: column;
@@ -147,7 +145,7 @@
   }
 
   .parteIzquierda {
-    height: auto; /* Ajustar la altura automáticamente según el contenido */
+    height: auto;
     width: 100%;
     overflow-y: auto;
     padding: 0;
@@ -160,25 +158,19 @@
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    padding: 1em; /* Agregar un espaciado */
-  }
-  .card {
-    
+    padding: 1em; 
   }
 
   .cardUsuario {
     width: 100%;
-    margin-bottom: 1em; 
-    /* Agregar un margen inferior para separar de las citas */
+    margin-bottom: 1em;
   }
 
   .citasContainer {
-    max-height: calc(100vh - 300px); /* Ajustar el valor según el espacio disponible deseado para las citas */
+    max-height: calc(100vh - 6.3em);
     overflow-y: auto;
   }
 }
-
-
 
 .citasContainer {
   display: grid;

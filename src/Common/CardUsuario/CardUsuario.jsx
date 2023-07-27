@@ -1,7 +1,7 @@
 import React from "react";
 import "./CardUsuario.css";
 
-export const CardUsuario = ({ user, handleOpenModal, handleVerMisCitas }) => {
+export const CardUsuario = ({ user, handleAbrirModal, handleVerMisCitas }) => {
   return (
     <div className="cardCustom d-flex justify-content-center">
       <div className="card" id="card">
@@ -24,7 +24,7 @@ export const CardUsuario = ({ user, handleOpenModal, handleVerMisCitas }) => {
               <strong>Código Postal:</strong> {user?.codigo_postal}
             </li>
           </ul>
-          <button className="btn btn-primary" onClick={handleOpenModal}>
+          <button className="btn btn-primary" onClick={handleAbrirModal}>
             Modificar
           </button>
           <div className="botones-container">
