@@ -22,7 +22,7 @@ export const PanelUsuario = () => {
   const [contraseñaError, setContraseñaError] = useState("");
 
   // Obtiene las credenciales del usuario desde el estado global
-  const { credentials = {} } = useSelector((state) => state.user);
+  const { credentials = {} } = useSelector((state) => state.usuario);
 
   // Carga los datos del usuario cuando el componente se monta o las credenciales cambian
   useEffect(() => {

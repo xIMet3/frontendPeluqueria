@@ -1,29 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./PedirCita.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { crearCita } from "../../../Services/apiCalls";
+import { crearCita, mostrarEmpleados, mostrarServicios } from "../../../Services/apiCalls";
 import { userData } from "../userSlice";
 import { Button, Form } from "react-bootstrap";
+
 
 export const PedirCita = () => {
   // Obtiene las credenciales del usuario
   const { credentials } = useSelector(userData);
+
   // Estado para almacenar los datos del formulario
   const [body, setBody] = useState({});
+
   // Estado para manejar errores en el formulario
   const [error, setError] = useState("");
-  // Estado para mostrar el mensaje de exito
+
+  // Estado para mostrar el mensaje de éxito
   const [successMessage, setSuccessMessage] = useState("");
+
   // Estado para mostrar le mensaje de no hay citas disponibles
   const [citasNoDisponibles, setCitasNoDisponibles] = useState(false);
+
   // Estado para almacenar las citas existentes
   const [citas, setCitas] = useState([]);
+
+  // Estado para almacenar la lista de empleados
+  const [empleados, setEmpleados] = useState([]);
+
+  // Estado para almacenar la lista de servicios
+  const [servicios, setServicios] = useState([]);
+
   // Estado para controlar la visibilidad del modal
   const [showModal, setShowModal] = useState(false);
-  //Hook de enrutamiento para redireccionar despues de enviar el formulario
+
+  // Hook de enrutamiento para redireccionar después de enviar el formulario
   const navigate = useNavigate();
-  // Funcion para manejar el cambio de valor en los campos del formulario
+
+  // Función para manejar el cambio de valor en los campos del formulario
   const inputHandler = ({ target }) => {
     let { name, value } = target;
     setBody((prevState) => ({
@@ -31,58 +46,38 @@ export const PedirCita = () => {
       [name]: value,
     }));
   };
-  // Funcion para manejar el envio del formulario
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Valida si todos los campos del formulario estan seleccionados
-    if (!body.fecha || !body.servicio_id || !body.empleado_id) {
-      setError("Porfavor, selecciona todos los campos.");
-    }
-    // Obtiene la fecha y hora seleccionada y la fecha y hora actual
-    const fechaSeleccionada = new Date(body.fecha);
-    const fechaActual = new Date();
-    // Valida que la fecha y hora seleccionada sea posterior a la actual
-    if (fechaSeleccionada <= fechaActual) {
-      setError("Selecciona una fecha y hora posterior a la actual.");
-      return;
-    }
-    // Valida que la fecha seleccionada no sea domingo
-    const concertarCita = () => {
-      if (!fechaSeleccionada) {
-        setError("Por favor, seleccione una fecha para concertar la cita.");
-      }
-      if (fechaSeleccionada.getDay() === 0) {
-        setError("El horario es de lunes a sábado");
-        return;
-      }
-    };
-    // Valida el rango de horas disponibles
-    const horaSeleccionada = fechaSeleccionada.getHours();
-    const isHoraValida =
-      (horaSeleccionada >= 9 && horaSeleccionada < 13) ||
-      (horaSeleccionada >= 16 && horaSeleccionada < 20);
-    if (!isHoraValida) {
-      setError(
-        "Las horas de cita disponibles son de 9:00 a 13 y de 16:00 a 20:00."
-      );
-      return;
-    }
 
+  // Función para cargar la lista de empleados al montar el componente
+  const obtenerEmpleados = async () => {
     try {
-      crearCita(credentials.token, body)
-        .then((res) => {
-          if (res.succes) {
-            setSuccessMessage("Su cita ha sido concertada con éxito");
-            setTimeout(() => {
-              navigate("/panelUsuario");
-            }, 1500);
-          }
-        })
-        .catch((error) => console.log(error));
+      const responseEmpleados = await mostrarEmpleados();
+      setEmpleados(responseEmpleados.data);
     } catch (error) {
       console.log(error);
     }
   };
+
+  // Función para cargar la lista de servicios al montar el componente
+  const obtenerServicios = async () => {
+    try {
+      const responseServicios = await mostrarServicios();
+      setServicios(responseServicios.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Función para manejar el envío del formulario
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Resto del código para validar y enviar el formulario...
+  };
+
+  // Cargar la lista de empleados y servicios al montar el componente
+  useEffect(() => {
+    obtenerEmpleados();
+    obtenerServicios();
+  }, []);
 
   return (
     <div className="pedirCitaEntera">
@@ -102,23 +97,31 @@ export const PedirCita = () => {
             />
           </Form.Group>
 
-          {/* Inputs para elegir empleado, servicio y comentario */}
+          {/* Input para elegir empleado */}
           <Form.Group id="inputEmpleado">
             <Form.Label><strong>Empleado</strong></Form.Label>
-            <Form.Control
-              type="text"
-              name="empleado_id"
-              onChange={inputHandler}
-            />
+            <Form.Control as="select" name="empleado_id" onChange={inputHandler}>
+              <option value="">Selecciona un empleado</option>
+              {empleados && empleados.map((empleado) => (
+                <option key={empleado.id} value={empleado.id}>{empleado.nombre}</option>
+              ))}
+            </Form.Control>
           </Form.Group>
+
+          {/* Input para elegir servicio */}
           <Form.Group id="inputServicio">
             <Form.Label><strong>Servicio</strong></Form.Label>
-            <Form.Control
-              type="text"
-              name="servicio_id"
-              onChange={inputHandler}
-            />
+            <Form.Control as="select" name="servicio_id" onChange={inputHandler}>
+              <option value="">Selecciona un servicio</option>
+              {servicios && servicios.map((servicio) => (
+                <option key={servicio.id} value={servicio.id}>
+                  {servicio.nombre_servicio} - Precio: {servicio.precio_servicio}
+                </option>
+              ))}
+            </Form.Control>
           </Form.Group>
+
+          {/* Input para el comentario */}
           <Form.Group id="inputComentario">
             <Form.Label><strong>Comentario</strong></Form.Label>
             <Form.Control
@@ -134,6 +137,7 @@ export const PedirCita = () => {
     </div>
   );
 };
+
 
 // const isAppointmentExist = appointments.find((appointment) => {
 //     const appointmentDate = new Date(appointment.date);

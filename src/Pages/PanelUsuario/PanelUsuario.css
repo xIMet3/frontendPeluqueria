@@ -86,6 +86,13 @@
   align-items: center;
   position: relative; /* Posición relativa para alinear la "x" */
 }
+.modal-contenido input {
+  background-color: lightgray;
+}
+
+.modal-contenido button {
+  background-color:coral ;
+}
 
 /* "x" de cerrar el modal */
 .cerrar {
