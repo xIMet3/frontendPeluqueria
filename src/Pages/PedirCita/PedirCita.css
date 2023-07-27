@@ -66,15 +66,17 @@
 }
 
 .success-message {
+  width: 20%;
+  height: 20%;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(0, 128, 0, 0.9);
-  color: white;
+  background-color: rgba(0, 128, 0, 0.8);
+  color: red;
   padding: 1em;
   border-radius: 0.5em;
-  font-size: 1.2em;
+  font-size: xx-large;
   text-align: center;
   z-index: 9999;
 }
@@ -101,5 +103,21 @@
 
   .imagenFija {
     background-size: 90%;
+  }
+
+  .success-message {
+    width: 80%;
+    height: 40%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 128, 0, 0.8);
+    color: red;
+    padding: 1em;
+    border-radius: 0.5em;
+    font-size: xx-large;
+    text-align: center;
+    z-index: 9999;
   }
 }

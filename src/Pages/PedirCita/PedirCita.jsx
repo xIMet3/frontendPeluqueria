@@ -71,23 +71,21 @@ export const PedirCita = () => {
     e.preventDefault();
 
     try {
-      // Enviamos los datos del formulario al backend para crear la cita
-      const res = await crearCita(credentials.token, body);
-
-      if (res.success) {
-        // La cita fue creada exitosamente
-        setSuccessMessage("Su cita ha sido concertada con éxito");
-        console.log(successMessage)
-        setTimeout(() => {
-          navigate("/panelUsuario");
-        }, 1500);
-      } else {
-        // Ocurrió un error al crear la cita, mostramos el mensaje de error
-        setError("Error al crear la cita");
-      }
+      // Llama a la funcion de creacion de cita y maneja la respuesta
+      crearCita(credentials.token, body)
+        .then((res) => {
+          if (res.success) {
+            console.log(successMessage)
+            setSuccessMessage("Su cita ha sido creada con éxito");
+            setTimeout(() => {
+              setSuccessMessage(""); // Limpia el mensaje después de un tiempo para que desaparezca
+              navigate("/panelUsuario");
+            }, 1500);
+          }
+        })
+        .catch((error) => console.log(error));
     } catch (error) {
       console.log(error);
-      setError("Error al crear la cita");
     }
   };
 
@@ -100,7 +98,9 @@ export const PedirCita = () => {
   return (
     <div className="pedirCitaEntera">
       <div className="formularioCita">
-      {successMessage && <div className="success-message">{successMessage}</div>}
+        {successMessage && 
+          <div className="success-message">{successMessage}</div>
+        }
         <h1>Concertar una Cita</h1>
         <Form onSubmit={handleSubmit} id="formularioInputs">
           {/* Espacio para la imagen */}
@@ -108,7 +108,9 @@ export const PedirCita = () => {
 
           {/* Input para elegir fecha y hora */}
           <Form.Group id="inputFecha">
-            <Form.Label><strong>Fecha y hora</strong></Form.Label>
+            <Form.Label>
+              <strong>Fecha y hora</strong>
+            </Form.Label>
             <Form.Control
               type="datetime-local"
               name="fecha"
@@ -118,31 +120,50 @@ export const PedirCita = () => {
 
           {/* Input para elegir empleado */}
           <Form.Group id="inputEmpleado">
-            <Form.Label><strong>Empleado</strong></Form.Label>
-            <Form.Control as="select" name="empleado_id" onChange={inputHandler}>
+            <Form.Label>
+              <strong>Empleado</strong>
+            </Form.Label>
+            <Form.Control
+              as="select"
+              name="empleado_id"
+              onChange={inputHandler}
+            >
               <option value="">Selecciona un empleado</option>
-              {empleados && empleados.map((empleado) => (
-                <option key={empleado.id} value={empleado.id}>{empleado.nombre}</option>
-              ))}
+              {empleados &&
+                empleados.map((empleado) => (
+                  <option key={empleado.id} value={empleado.id}>
+                    {empleado.nombre}
+                  </option>
+                ))}
             </Form.Control>
           </Form.Group>
 
           {/* Input para elegir servicio */}
           <Form.Group id="inputServicio">
-            <Form.Label><strong>Servicio</strong></Form.Label>
-            <Form.Control as="select" name="servicio_id" onChange={inputHandler}>
+            <Form.Label>
+              <strong>Servicio</strong>
+            </Form.Label>
+            <Form.Control
+              as="select"
+              name="servicio_id"
+              onChange={inputHandler}
+            >
               <option value="">Selecciona un servicio</option>
-              {servicios && servicios.map((servicio) => (
-                <option key={servicio.id} value={servicio.id}>
-                  {servicio.nombre_servicio} - Precio: {servicio.precio_servicio}
-                </option>
-              ))}
+              {servicios &&
+                servicios.map((servicio) => (
+                  <option key={servicio.id} value={servicio.id}>
+                    {servicio.nombre_servicio} - Precio:{" "}
+                    {servicio.precio_servicio}
+                  </option>
+                ))}
             </Form.Control>
           </Form.Group>
 
           {/* Input para el comentario */}
           <Form.Group id="inputComentario">
-            <Form.Label><strong>Comentario</strong></Form.Label>
+            <Form.Label>
+              <strong>Comentario</strong>
+            </Form.Label>
             <Form.Control
               as="textarea"
               name="comentario"
@@ -150,15 +171,14 @@ export const PedirCita = () => {
             />
           </Form.Group>
 
-          <Button type="submit" id="botonConcertarCita">Concertar Cita</Button>
+          <Button type="submit" id="botonConcertarCita">
+            Concertar Cita
+          </Button>
         </Form>
       </div>
     </div>
   );
 };
-
-
-
 
 // const isAppointmentExist = appointments.find((appointment) => {
 //     const appointmentDate = new Date(appointment.date);
