@@ -61,3 +61,13 @@ export const mostrarServicios = async () => {
   const res = await axios.get("http://localhost:3000/usuario/verServicios");
   return res.data;
 };
+
+// Ver mis citas como usuario
+export const verMisCitas = async (token) => {
+  const res = await axios.get("http://localhost:3000/cita/misCitas", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+  return res.data.data;
+};

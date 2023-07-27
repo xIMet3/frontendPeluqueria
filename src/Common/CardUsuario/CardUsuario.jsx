@@ -1,7 +1,7 @@
 import React from "react";
 import "./CardUsuario.css";
 
-export const CardUsuario = ({ user, handleOpenModal }) => {
+export const CardUsuario = ({ user, handleOpenModal, handleVerMisCitas }) => {
   return (
     <div className="cardCustom d-flex justify-content-center">
       <div className="card" id="card">
@@ -28,7 +28,10 @@ export const CardUsuario = ({ user, handleOpenModal }) => {
             Modificar
           </button>
           <div className="botones-container">
-            <button className="btn btn-info">Ver Mis Citas</button>
+            {/* Agregamos el evento de clic al botón "Ver Mis Citas" */}
+            <button className="btn btn-info" onClick={handleVerMisCitas}>
+              Ver Mis Citas
+            </button>
           </div>
         </div>
       </div>
