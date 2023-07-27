@@ -6,7 +6,6 @@ import { crearCita, mostrarEmpleados, mostrarServicios } from "../../../Services
 import { userData } from "../userSlice";
 import { Button, Form } from "react-bootstrap";
 
-
 export const PedirCita = () => {
   // Obtiene las credenciales del usuario
   const { credentials } = useSelector(userData);
@@ -68,9 +67,28 @@ export const PedirCita = () => {
   };
 
   // Función para manejar el envío del formulario
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Resto del código para validar y enviar el formulario...
+
+    try {
+      // Enviamos los datos del formulario al backend para crear la cita
+      const res = await crearCita(credentials.token, body);
+
+      if (res.success) {
+        // La cita fue creada exitosamente
+        setSuccessMessage("Su cita ha sido concertada con éxito");
+        console.log(successMessage)
+        setTimeout(() => {
+          navigate("/panelUsuario");
+        }, 1500);
+      } else {
+        // Ocurrió un error al crear la cita, mostramos el mensaje de error
+        setError("Error al crear la cita");
+      }
+    } catch (error) {
+      console.log(error);
+      setError("Error al crear la cita");
+    }
   };
 
   // Cargar la lista de empleados y servicios al montar el componente
@@ -82,6 +100,7 @@ export const PedirCita = () => {
   return (
     <div className="pedirCitaEntera">
       <div className="formularioCita">
+      {successMessage && <div className="success-message">{successMessage}</div>}
         <h1>Concertar una Cita</h1>
         <Form onSubmit={handleSubmit} id="formularioInputs">
           {/* Espacio para la imagen */}
@@ -137,6 +156,8 @@ export const PedirCita = () => {
     </div>
   );
 };
+
+
 
 
 // const isAppointmentExist = appointments.find((appointment) => {

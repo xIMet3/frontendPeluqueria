@@ -65,6 +65,20 @@
   transition: 0.4s;
 }
 
+.success-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 128, 0, 0.9);
+  color: white;
+  padding: 1em;
+  border-radius: 0.5em;
+  font-size: 1.2em;
+  text-align: center;
+  z-index: 9999;
+}
+
 /* Pantallas pequeñas */
 @media (max-width: 576px) {
   .formularioCita {
