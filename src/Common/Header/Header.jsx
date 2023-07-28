@@ -22,7 +22,10 @@ export const Header = () => {
     <Navbar.Collapse id="responsive-navbar-nav">
       <Nav className="me-auto">
         <Nav.Link className="text-light">
-          <Boton2 path={"/panelUsuario"} name={"Panel de control"} />
+          <Boton2 path={"/panelUsuario"} name={"Panel de usuario"} />
+        </Nav.Link>
+        <Nav.Link className="text-light">
+          <Boton2 path={"/panelEmpleado"} name={"Panel de Empleado"} />
         </Nav.Link>
         <Nav.Link className="text-light">
           <Boton2 path={"/"} name={"Servicios"} />

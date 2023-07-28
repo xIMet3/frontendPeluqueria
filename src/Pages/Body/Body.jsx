@@ -5,6 +5,7 @@ import { Register } from "../Register/Register";
 import Login from "../Login/Login";
 import { PanelUsuario } from "../PanelUsuario/PanelUsuario";
 import { PedirCita } from "../PedirCita/PedirCita";
+import { PanelEmpleado } from "../PanelEmpleado/PanelEmpleado";
 
 
 export const Body = () => {
@@ -16,6 +17,8 @@ export const Body = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/panelUsuario" element={<PanelUsuario />} />
                 <Route path="/concertarCita" element={<PedirCita />} />
+                <Route path="/panelUsuario" element={<PanelUsuario />} />
+                <Route path="/panelEmpleado" element={<PanelEmpleado />} />
             </Routes>
         </>
     )

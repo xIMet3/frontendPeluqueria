@@ -138,7 +138,6 @@ export const PanelUsuario = () => {
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
-      timeZoneName: "short",
     };
     return new Date(cita.fecha).toLocaleString(undefined, options);
   };

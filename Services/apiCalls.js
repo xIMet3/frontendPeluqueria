@@ -71,3 +71,14 @@ export const verMisCitas = async (token) => {
   });
   return res.data.data;
 };
+
+// Ver todas las citas como empleado y admin
+export const todasLasCitas = async (token, citaData) => {
+  const res = await axios.get("http://localhost:3000/empleado/todasLasCitas", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: citaData,
+  });
+  return res.data;
+}
