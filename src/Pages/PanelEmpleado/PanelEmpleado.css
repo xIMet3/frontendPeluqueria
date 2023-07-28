@@ -1,26 +1,53 @@
 .vistaEmpleadoEntera {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .citas-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .citas-table th,
-  .citas-table td {
-    border: 0.1em solid #dddddd;
-    padding: 0.5em;
-  }
-  
-  .citas-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-  }
-  
-  .citas-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.citas-table th,
+.citas-table td {
+  border: 0.1em solid #dddddd;
+  padding: 0.5em;
+}
+
+.citas-table th {
+  background-color:burlywood ;
+  font-weight: bold;
+}
+
+.citas-table tr:nth-child(even) {
+  background-color: #d4cece;
+}
+
+.botones-desplegable {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5em;
+}
+
+/* Estilo para dar separación entre los botones */
+.botones-desplegable button {
+  margin-left: 0.5em;
+  border-radius: 0.6em;
+}
+
+#botonOpciones {
+  border-radius: 0.6em;
+}
+
+#botonRealizada {
+  background-color: lightgreen;
+}
+
+#botonCancelar {
+  background-color: red;
+}
+
+#botonModificar {
+  background-color: coral;
+}
