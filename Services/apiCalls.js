@@ -116,7 +116,6 @@ export const modificarCita = async (token, citaModData) => {
     headers: {
       Authorization:`Bearer ${token}`,
     },
-    data: citaModData,
   });
   return res.data;
 };

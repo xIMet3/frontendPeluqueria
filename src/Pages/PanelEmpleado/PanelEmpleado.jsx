@@ -6,6 +6,7 @@ import {
   modificarCancelarCita,
   modificarCitaRealizada,
 } from "../../../Services/apiCalls";
+import { useNavigate } from "react-router-dom";
 
 export const PanelEmpleado = () => {
   const [citas, setCitas] = useState([]);
@@ -14,6 +15,7 @@ export const PanelEmpleado = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const citasPerPage = 20;
   const token = useSelector((state) => state.usuario.credentials.token);
+  const navigate = useNavigate();
 
   useEffect(() => {
     obtenerTodasLasCitas();
@@ -95,7 +97,7 @@ export const PanelEmpleado = () => {
         );
       } else if (estado === "Realizada") {
         await modificarCitaRealizada(token, citaId);
-        // Una vez se haya marcado como realizada , actualiza el estado local
+        // Una vez se haya marcado como realizada, actualiza el estado local
         setCitas((prevCitas) =>
           prevCitas.map((cita) =>
             cita.id === citaId
@@ -104,6 +106,21 @@ export const PanelEmpleado = () => {
           )
         );
       }
+    } catch (error) {
+      console.error("Error al modificar la cita:", error);
+    }
+  };
+
+  // Ruta de la vista ModificadorCitaEmpleado
+  const path = "/modificadorCitaEmpleado";
+
+  // Función para modificar la cita y redirigir a la vista ModificadorCitaEmpleado
+  const handleModificarCita = async (citaId) => {
+    try {
+      // Aquí puedes agregar la lógica para modificar la cita, si es necesario
+
+      // Redirecciona al usuario a la vista "ModificadorCitaEmpleado"
+      navigate(path);
     } catch (error) {
       console.error("Error al modificar la cita:", error);
     }
@@ -142,18 +159,6 @@ export const PanelEmpleado = () => {
               citasPaginadas.map((cita) => {
                 const { fechaLocal, horaLocal } = formatearFecha(cita.fecha);
                 const nombreCompleto = `${cita.Usuario?.nombre} ${cita.Usuario?.apellido}`;
-                const getEstadoColor = (estado) => {
-                  switch (estado) {
-                    case "Pendiente":
-                      return "orange";
-                    case "Cancelada":
-                      return "red";
-                    case "Realizada":
-                      return "green";
-                    default:
-                      return "black";
-                  }
-                };
 
                 return (
                   <React.Fragment key={cita.id}>
@@ -166,7 +171,6 @@ export const PanelEmpleado = () => {
                       <td>{cita.Servicio?.nombre_servicio}</td>
                       <td>{cita.Servicio?.precio_servicio}</td>
                       <td>{cita.comentario}</td>
-                      {/* Obtener el estilo directamente aquí */}
                       <td
                         style={{
                           color:
@@ -178,7 +182,7 @@ export const PanelEmpleado = () => {
                               : cita.Cita_estado?.nombre_cita_estado ===
                                 "Realizada"
                               ? "green"
-                              : "black", // Opcional: un color por defecto si el estado no coincide con los anteriores.
+                              : "black",
                         }}
                       >
                         {cita.Cita_estado?.nombre_cita_estado}
@@ -196,9 +200,10 @@ export const PanelEmpleado = () => {
                       <tr>
                         <td colSpan="10">
                           <div className="botones-desplegable">
+                            {/* Llamamos a la función handleModificarCita al hacer clic en el botón */}
                             <button
                               id="botonModificar"
-                              onClick={() => console.log("Modificar", cita.id)}
+                              onClick={() => handleModificarCita(cita.id)}
                             >
                               Modificar
                             </button>

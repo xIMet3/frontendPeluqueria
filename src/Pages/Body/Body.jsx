@@ -6,6 +6,7 @@ import Login from "../Login/Login";
 import { PanelUsuario } from "../PanelUsuario/PanelUsuario";
 import { PedirCita } from "../PedirCita/PedirCita";
 import { PanelEmpleado } from "../PanelEmpleado/PanelEmpleado";
+import { ModificadorCitaEmpleado } from "../ModificarCitaEmpleado/ModificarCitaEmpleado";
 
 
 export const Body = () => {
@@ -19,6 +20,7 @@ export const Body = () => {
                 <Route path="/concertarCita" element={<PedirCita />} />
                 <Route path="/panelUsuario" element={<PanelUsuario />} />
                 <Route path="/panelEmpleado" element={<PanelEmpleado />} />
+                <Route path="/modificadorCitaEmpleado" element={<ModificadorCitaEmpleado />} />
             </Routes>
         </>
     )
