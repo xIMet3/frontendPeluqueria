@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import {
   todasLasCitas,
   modificarCancelarCita,
+  modificarCitaRealizada,
 } from "../../../Services/apiCalls";
 
 export const PanelEmpleado = () => {
@@ -12,7 +13,6 @@ export const PanelEmpleado = () => {
   const [filterDate, setFilterDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const citasPerPage = 20;
-
   const token = useSelector((state) => state.usuario.credentials.token);
 
   useEffect(() => {
@@ -81,21 +81,31 @@ export const PanelEmpleado = () => {
     indexOfLastCita
   );
 
-  const handleCancelarCita = async (citaId) => {
+  const handleCancelarCita = async (citaId, estado) => {
     try {
-      await modificarCancelarCita(token, citaId);
-      // Una vez se haya modificado correctamente en el servidor, actualizamos el estado local (opcional)
-      setCitas((prevCitas) =>
-        prevCitas.map((cita) =>
-          cita.id === citaId
-            ? { ...cita, Cita_estado: { nombre_cita_estado: "Cancelada" } }
-            : cita
-        )
-      );
-      // Si deseas, podrías mostrar un mensaje de éxito o recargar la lista de citas.
+      if (estado === "Cancelada") {
+        await modificarCancelarCita(token, citaId);
+        // Una vez se haya modificado actualiza el estado local
+        setCitas((prevCitas) =>
+          prevCitas.map((cita) =>
+            cita.id === citaId
+              ? { ...cita, Cita_estado: { nombre_cita_estado: "Cancelada" } }
+              : cita
+          )
+        );
+      } else if (estado === "Realizada") {
+        await modificarCitaRealizada(token, citaId);
+        // Una vez se haya marcado como realizada , actualiza el estado local
+        setCitas((prevCitas) =>
+          prevCitas.map((cita) =>
+            cita.id === citaId
+              ? { ...cita, Cita_estado: { nombre_cita_estado: "Realizada" } }
+              : cita
+          )
+        );
+      }
     } catch (error) {
-      // Manejar el error, si es necesario
-      console.error("Error al cancelar la cita:", error);
+      console.error("Error al modificar la cita:", error);
     }
   };
 
@@ -141,7 +151,7 @@ export const PanelEmpleado = () => {
                     case "Realizada":
                       return "green";
                     default:
-                      return "black"; // Opcional: un color por defecto si el estado no coincide con los anteriores.
+                      return "black";
                   }
                 };
 
@@ -200,7 +210,9 @@ export const PanelEmpleado = () => {
                             </button>
                             <button
                               id="botonRealizada"
-                              onClick={() => console.log("Realizada", cita.id)}
+                              onClick={() =>
+                                handleCancelarCita(cita.id, "Realizada")
+                              }
                             >
                               Realizada
                             </button>
