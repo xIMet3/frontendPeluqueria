@@ -204,7 +204,9 @@ export const PanelEmpleado = () => {
                             </button>
                             <button
                               id="botonCancelar"
-                              onClick={() => handleCancelarCita(cita.id)}
+                              onClick={() =>
+                                handleCancelarCita(cita.id, "Cancelada")
+                              }
                             >
                               Cancelar
                             </button>

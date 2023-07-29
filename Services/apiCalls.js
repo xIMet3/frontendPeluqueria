@@ -100,7 +100,7 @@ export const modificarCancelarCita = async (token, citaId) => {
 export const modificarCitaRealizada = async (token, citaId) => {
   const res = await axios.put(
     `http://localhost:3000/empleado/modificarCita/${citaId}`,
-    { cita_estado_id: 3 }, // Aqui modificamos el estado de la cita a 3 (Realizada)
+    { cita_estado_id: 3 }, // Aqui modifica el estado de la cita a 3 (Realizada)
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -110,22 +110,14 @@ export const modificarCitaRealizada = async (token, citaId) => {
   return res.data;
 };
 
+// Modificar cita
+export const modificarCita = async (token, citaModData) => {
+  const res = await axios.put(`http://localhost:3000/empleado/modificarCita/${citaModData.id}`, citaModData, {
+    headers: {
+      Authorization:`Bearer ${token}`,
+    },
+    data: citaModData,
+  });
+  return res.data;
+};
 
-
-
-
-
-
-
-
-
-// // Modificar/Cancelar una cita como empleado
-// export const modificarCancelarCita = async (token, citaModData) => {
-//   const res = await axios.put(`http://localhost:3000/empleado/modificarCita/${citaModData.id}`, citaModData, {
-//     headers: {
-//       Authorization:`Bearer ${token}`,
-//     },
-//     data: citaModData,
-//   });
-//   return res.data;
-// };
