@@ -111,8 +111,8 @@ export const modificarCitaRealizada = async (token, citaId) => {
 };
 
 // Modificar cita
-export const modificarCita = async (token, citaModData) => {
-  const res = await axios.put(`http://localhost:3000/empleado/modificarCita/${citaModData.id}`, citaModData, {
+export const modificarCita = async (token, citaData) => {
+  const res = await axios.put(`http://localhost:3000/empleado/modificarCita/${citaData.id}`, citaData, {
     headers: {
       Authorization:`Bearer ${token}`,
     },

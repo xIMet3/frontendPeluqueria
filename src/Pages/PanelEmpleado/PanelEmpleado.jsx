@@ -87,7 +87,7 @@ export const PanelEmpleado = () => {
     try {
       if (estado === "Cancelada") {
         await modificarCancelarCita(token, citaId);
-        // Una vez se haya modificado actualiza el estado local
+        // Una vez se haya modificado, actualiza el estado local
         setCitas((prevCitas) =>
           prevCitas.map((cita) =>
             cita.id === citaId
@@ -119,8 +119,8 @@ export const PanelEmpleado = () => {
     try {
       // Aquí puedes agregar la lógica para modificar la cita, si es necesario
 
-      // Redirecciona al usuario a la vista "ModificadorCitaEmpleado"
-      navigate(path);
+      // Redirecciona al usuario a la vista "ModificadorCitaEmpleado" con el ID de la cita seleccionada
+      navigate(path, { state: { id: citaId } });
     } catch (error) {
       console.error("Error al modificar la cita:", error);
     }
