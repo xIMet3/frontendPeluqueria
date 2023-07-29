@@ -34,7 +34,7 @@ export const userSlice = createSlice({
       state.data.email = "";
       state.data.telefono = "";
       state.data.codigo_postal = "";
-      state.data.rol_id = 3;
+      state.data.rol_id = "";
     },
   },
 });

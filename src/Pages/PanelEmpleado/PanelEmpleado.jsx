@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./PanelEmpleado.css";
 import { useSelector } from "react-redux";
-import { todasLasCitas } from "../../../Services/apiCalls";
+import {
+  todasLasCitas,
+  modificarCancelarCita,
+} from "../../../Services/apiCalls";
 
 export const PanelEmpleado = () => {
   const [citas, setCitas] = useState([]);
@@ -73,7 +76,28 @@ export const PanelEmpleado = () => {
   const indexOfLastCita = currentPage * citasPerPage;
   const indexOfFirstCita = indexOfLastCita - citasPerPage;
   const citasFiltradas = citas.filter(filtrarCitasPorFecha);
-  const citasPaginadas = citasFiltradas.slice(indexOfFirstCita, indexOfLastCita);
+  const citasPaginadas = citasFiltradas.slice(
+    indexOfFirstCita,
+    indexOfLastCita
+  );
+
+  const handleCancelarCita = async (citaId) => {
+    try {
+      await modificarCancelarCita(token, citaId);
+      // Una vez se haya modificado correctamente en el servidor, actualizamos el estado local (opcional)
+      setCitas((prevCitas) =>
+        prevCitas.map((cita) =>
+          cita.id === citaId
+            ? { ...cita, Cita_estado: { nombre_cita_estado: "Cancelada" } }
+            : cita
+        )
+      );
+      // Si deseas, podrías mostrar un mensaje de éxito o recargar la lista de citas.
+    } catch (error) {
+      // Manejar el error, si es necesario
+      console.error("Error al cancelar la cita:", error);
+    }
+  };
 
   return (
     <div className="vistaEmpleadoEntera">
@@ -108,10 +132,18 @@ export const PanelEmpleado = () => {
               citasPaginadas.map((cita) => {
                 const { fechaLocal, horaLocal } = formatearFecha(cita.fecha);
                 const nombreCompleto = `${cita.Usuario?.nombre} ${cita.Usuario?.apellido}`;
-                const estiloEstado =
-                  cita.Cita_estado?.nombre_cita_estado === "Pendiente"
-                    ? { color: "orange" }
-                    : {};
+                const getEstadoColor = (estado) => {
+                  switch (estado) {
+                    case "Pendiente":
+                      return "orange";
+                    case "Cancelada":
+                      return "red";
+                    case "Realizada":
+                      return "green";
+                    default:
+                      return "black"; // Opcional: un color por defecto si el estado no coincide con los anteriores.
+                  }
+                };
 
                 return (
                   <React.Fragment key={cita.id}>
@@ -124,7 +156,21 @@ export const PanelEmpleado = () => {
                       <td>{cita.Servicio?.nombre_servicio}</td>
                       <td>{cita.Servicio?.precio_servicio}</td>
                       <td>{cita.comentario}</td>
-                      <td style={estiloEstado}>
+                      {/* Obtener el estilo directamente aquí */}
+                      <td
+                        style={{
+                          color:
+                            cita.Cita_estado?.nombre_cita_estado === "Pendiente"
+                              ? "orange"
+                              : cita.Cita_estado?.nombre_cita_estado ===
+                                "Cancelada"
+                              ? "red"
+                              : cita.Cita_estado?.nombre_cita_estado ===
+                                "Realizada"
+                              ? "green"
+                              : "black", // Opcional: un color por defecto si el estado no coincide con los anteriores.
+                        }}
+                      >
                         {cita.Cita_estado?.nombre_cita_estado}
                       </td>
                       <td>
@@ -148,7 +194,7 @@ export const PanelEmpleado = () => {
                             </button>
                             <button
                               id="botonCancelar"
-                              onClick={() => console.log("Cancelar", cita.id)}
+                              onClick={() => handleCancelarCita(cita.id)}
                             >
                               Cancelar
                             </button>
@@ -167,7 +213,9 @@ export const PanelEmpleado = () => {
               })
             ) : (
               <tr>
-                <td colSpan="10">No se encontraron citas para la fecha seleccionada.</td>
+                <td colSpan="10">
+                  No se encontraron citas para la fecha seleccionada.
+                </td>
               </tr>
             )}
           </tbody>

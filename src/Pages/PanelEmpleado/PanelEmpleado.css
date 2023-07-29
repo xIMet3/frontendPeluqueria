@@ -69,3 +69,15 @@
     padding: 1em;
   }
 }
+
+.estado-pendiente {
+  color: orange;
+}
+
+.estado-cancelada {
+  color: red;
+}
+
+.estado-realizada {
+  color: green;
+}
