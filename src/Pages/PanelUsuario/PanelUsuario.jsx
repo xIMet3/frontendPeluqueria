@@ -179,16 +179,17 @@ export const PanelUsuario = () => {
           {citasPaginadas().map((cita) => (
             <div key={cita.id} className="citaItem">
               <div className="citaItemInfo">
-                <p>{formatoLocalFecha(cita)}</p>
-                <p>Servicio: {cita.Servicio.nombre_servicio}</p>
-                <p>Precio: {cita.Servicio.precio_servicio}</p>
+                <p><strong>{formatoLocalFecha(cita)}</strong></p>
+                <p><strong>Servicio:</strong> {cita.Servicio.nombre_servicio}</p>
+                <p><strong>Empleado:</strong> {cita.Empleado.nombre}</p>
+                <p><strong>Precio:</strong> {cita.Servicio.precio_servicio}</p>
                 <div className="citaItemComentario">
                   <p>
                     <strong>Comentario:</strong> {cita.comentario}
                   </p>
                 </div>
                 <p className="estadoCita">
-                  Estado: {cita.Cita_estado.nombre_cita_estado}
+                  {cita.Cita_estado.nombre_cita_estado}
                 </p>
               </div>
             </div>
