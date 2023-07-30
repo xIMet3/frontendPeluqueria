@@ -120,3 +120,14 @@ export const modificarCita = async (token, citaData) => {
   return res.data;
 };
 
+// Obtener todos los estados de las citas
+export const obtenerEstadosCita = async (token) => {
+  const res = await axios.get("http://localhost:3000/empleado/obtenerEstados", {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  
+  return res.data;
+}
+

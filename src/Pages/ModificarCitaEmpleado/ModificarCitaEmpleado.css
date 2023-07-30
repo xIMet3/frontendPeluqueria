@@ -1,0 +1,54 @@
+
+.modificadorCitaEmpleado {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    height: 80vh; 
+  }
+  
+  .formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30em;
+    padding: 2em;
+    border: 0.15em solid black;
+    border-radius: 1em;
+    font-size: x-large;
+    background-color: darkseagreen;
+  }
+  
+  .formulario div {
+    margin-bottom: 1.5em;
+  }
+  
+  .formulario label {
+    font-weight: bold;
+  }
+  
+  .formulario button {
+    margin-top: 1em;
+  }
+
+  @media screen and (max-width: 600px) {
+    .formulario {
+      width: 90%; 
+      padding: 1em;
+      font-size: large;
+    }
+
+    .formulario input[type="text"],
+    .formulario input[type="date"],
+    .formulario input[type="time"],
+    .formulario select {
+        width: 100%;
+        max-width: 100%;
+  }
+
+  .formulario div {
+    margin-bottom: 0.5em;
+  }
+}
+
+  
