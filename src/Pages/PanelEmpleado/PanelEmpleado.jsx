@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from "react";
 import "./PanelEmpleado.css";
 import { useSelector } from "react-redux";
-import {
-  todasLasCitas,
-  modificarCancelarCita,
-  modificarCitaRealizada,
-} from "../../../Services/apiCalls";
+import { todasLasCitas, modificarCancelarCita, modificarCitaRealizada } from "../../../Services/apiCalls";
 import { useNavigate } from "react-router-dom";
 
 export const PanelEmpleado = () => {
   const [citas, setCitas] = useState([]);
-  const [dropdownStates, setDropdownStates] = useState({});
+  const [estadoDesplegable, setEstadoDesplegable] = useState({});
   const [filterDate, setFilterDate] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const citasPerPage = 20;
+  const [filtroNombre, setFiltroNombre] = useState("");
+  const [paginaActual, setPaginaActual] = useState(1);
+  const citasPorPagina = 20;
   const token = useSelector((state) => state.usuario.credentials.token);
   const navigate = useNavigate();
 
+  // Efecto de montaje del componente
   useEffect(() => {
     obtenerTodasLasCitas();
   }, []);
 
+  // Funcion para obtener todas las citas
   const obtenerTodasLasCitas = async () => {
     try {
       const citasData = await todasLasCitas(token);
@@ -30,19 +29,22 @@ export const PanelEmpleado = () => {
     }
   };
 
+  // Funcion para formatear la fecha y hora
   const formatearFecha = (fecha) => {
     const fechaLocal = new Date(fecha).toLocaleDateString();
     const horaLocal = new Date(fecha).toLocaleTimeString();
     return { fechaLocal, horaLocal };
   };
 
-  const toggleDropdown = (citaId) => {
-    setDropdownStates((prevState) => ({
+  // Funcion para alternar el estado del menu desplegable de cada cita
+  const desplegable = (citaId) => {
+    setEstadoDesplegable((prevState) => ({
       ...prevState,
       [citaId]: !prevState[citaId],
     }));
   };
 
+  // Funcion para filtrar las citas por fecha
   const filtrarCitasPorFecha = (cita) => {
     if (!filterDate) {
       return true;
@@ -51,38 +53,67 @@ export const PanelEmpleado = () => {
     const fechaCita = new Date(cita.fecha);
     const diaCita = fechaCita.getDate();
     const mesCita = fechaCita.getMonth() + 1;
-    const anioCita = fechaCita.getFullYear();
-    const fechaFormateada = `${anioCita}-${mesCita
+    const añoCita = fechaCita.getFullYear();
+    const fechaFormateada = `${añoCita}-${mesCita
       .toString()
       .padStart(2, "0")}-${diaCita.toString().padStart(2, "0")}`;
-
     return fechaFormateada === filterDate;
   };
 
-  const handleChangeFilter = (event) => {
-    setFilterDate(event.target.value);
-    setCurrentPage(1);
+  // Funcion para filtrar las citas por nombre
+  const filtrarCitasPorNombre = (cita) => {
+    if (!filtroNombre) {
+      return true;
+    }
+    const nombreUsuario = cita.Usuario?.nombre.toLowerCase();
+    const nombreFiltrado = filtroNombre.toLowerCase();
+    return nombreUsuario.includes(nombreFiltrado);
   };
 
-  const handleNextPage = () => {
-    const totalPages = Math.ceil(citasFiltradas.length / citasPerPage);
-    if (currentPage < totalPages) {
-      setCurrentPage((prevPage) => prevPage + 1);
+  // Funcion para manejar el cambio del filtro por fecha
+  const handleFiltroFecha = (event) => {
+    setFilterDate(event.target.value);
+    setPaginaActual(1); // Restablece la pagina actual a 1
+  };
+
+  // Funcion para manejar el cambio del filtro por nombre
+  const handleFiltroNombre = (event) => {
+    const inputName = event.target.value;
+    if (inputName.length <= 40) {
+      setFiltroNombre(inputName);
+      setPaginaActual(1); // Restablece la pagina actual a 1
     }
   };
 
-  const handlePrevPage = () => {
-    setCurrentPage((prevPage) => prevPage - 1);
+  // Funcion para manejar el botón de pagina siguiente
+  const handlePaginaSiguiente = () => {
+    const totalPages = Math.ceil(citasFiltradas.length / citasPorPagina);
+    if (paginaActual < totalPages) {
+      setPaginaActual((prevPage) => prevPage + 1);
+    }
   };
 
-  const indexOfLastCita = currentPage * citasPerPage;
-  const indexOfFirstCita = indexOfLastCita - citasPerPage;
-  const citasFiltradas = citas.filter(filtrarCitasPorFecha);
+  // Funcion para manejar el boton de pagina anterior
+  const handlePaginaAnterior = () => {
+    setPaginaActual((prevPage) => prevPage - 1);
+  };
+
+  // Calculo del indice de la ultima cita mostrada y la primera cita mostrada en la pagina actual
+  const indexUltimaCita = paginaActual * citasPorPagina;
+  const indexPrimeraCita = indexUltimaCita - citasPorPagina;
+
+  // Filtro de fecha y filtro de nombre
+  const citasFiltradas = citas
+    .filter(filtrarCitasPorFecha)
+    .filter(filtrarCitasPorNombre);
+
+  // Obtener las citas que se mostraran en la pagina actual
   const citasPaginadas = citasFiltradas.slice(
-    indexOfFirstCita,
-    indexOfLastCita
+    indexPrimeraCita,
+    indexUltimaCita
   );
 
+  // Funcion para manejar el botón de cancelar cita
   const handleCancelarCita = async (citaId, estado) => {
     try {
       if (estado === "Cancelada") {
@@ -114,30 +145,42 @@ export const PanelEmpleado = () => {
   // Ruta de la vista ModificadorCitaEmpleado
   const path = "/modificadorCitaEmpleado";
 
-  // Función para modificar la cita y redirigir a la vista ModificadorCitaEmpleado
+  // Funcion para redirigir a la vista ModificadorCitaEmpleado con la id de la cita seleccionada para modificar
   const handleModificarCita = async (citaId) => {
     try {
-      // Aquí puedes agregar la lógica para modificar la cita, si es necesario
-
-      // Redirecciona al usuario a la vista "ModificadorCitaEmpleado" con el ID de la cita seleccionada
       navigate(path, { state: { id: citaId } });
+
     } catch (error) {
       console.error("Error al modificar la cita:", error);
     }
   };
-
+  
   return (
     <div className="vistaEmpleadoEntera">
       <h1>Todas las citas existentes:</h1>
-      <div>
-        <label htmlFor="fechaFilter">Filtrar por fecha:</label>
-        <input
-          type="date"
-          id="fechaFilter"
-          value={filterDate}
-          onChange={handleChangeFilter}
-        />
+      <div className="filters-container">
+        {/* Filtro por fecha */}
+        <div className="filter-date">
+          <label htmlFor="fechaFilter">Filtrar por fecha:</label>
+          <input
+            type="date"
+            id="fechaFilter"
+            value={filterDate}
+            onChange={handleFiltroFecha}
+          />
+        </div>
+        {/* Filtro por nombre */}
+        <div className="filter-name">
+          <label htmlFor="nombreFilter">Filtrar por nombre: </label>
+          <input
+            type="text"
+            id="nombreFilter"
+            value={filtroNombre}
+            onChange={handleFiltroNombre}
+          />
+        </div>
       </div>
+      {/* Tabla de citas */}
       <div className="table-responsive">
         <table className="table table-bordered citas-table">
           <thead>
@@ -155,6 +198,7 @@ export const PanelEmpleado = () => {
             </tr>
           </thead>
           <tbody>
+            {/* Si hay citas filtradas para mostrar */}
             {citasFiltradas.length > 0 ? (
               citasPaginadas.map((cita) => {
                 const { fechaLocal, horaLocal } = formatearFecha(cita.fecha);
@@ -165,7 +209,9 @@ export const PanelEmpleado = () => {
                     <tr>
                       <td>{fechaLocal}</td>
                       <td>{horaLocal}</td>
-                      <td>{nombreCompleto}</td>
+                      <td>
+                        <strong style={{ color: 'darkred' }}>{nombreCompleto}</strong>
+                      </td>
                       <td>{cita.Usuario?.telefono}</td>
                       <td>{cita.Empleado?.nombre}</td>
                       <td>{cita.Servicio?.nombre_servicio}</td>
@@ -189,18 +235,18 @@ export const PanelEmpleado = () => {
                       </td>
                       <td>
                         <button
-                          onClick={() => toggleDropdown(cita.id)}
+                          onClick={() => desplegable(cita.id)}
                           id="botonOpciones"
                         >
                           Opciones
                         </button>
                       </td>
                     </tr>
-                    {dropdownStates[cita.id] && (
+                    {/* Despliegue de opciones */}
+                    {estadoDesplegable[cita.id] && (
                       <tr>
                         <td colSpan="10">
                           <div className="botones-desplegable">
-                            {/* Llamamos a la función handleModificarCita al hacer clic en el botón */}
                             <button
                               id="botonModificar"
                               onClick={() => handleModificarCita(cita.id)}
@@ -233,20 +279,21 @@ export const PanelEmpleado = () => {
             ) : (
               <tr>
                 <td colSpan="10">
-                  No se encontraron citas para la fecha seleccionada.
+                  No se encontraron citas para la fecha y el nombre seleccionados.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+      {/* Paginación */}
       <div className="pagination">
-        {currentPage > 1 && <button onClick={handlePrevPage}>Anterior</button>}
-        {citasFiltradas.length > citasPerPage &&
-          currentPage < Math.ceil(citasFiltradas.length / citasPerPage) && (
-            <button onClick={handleNextPage}>Siguiente</button>
+        {paginaActual > 1 && <button onClick={handlePaginaAnterior}>Anterior</button>}
+        {citasFiltradas.length > citasPorPagina &&
+          paginaActual < Math.ceil(citasFiltradas.length / citasPorPagina) && (
+            <button onClick={handlePaginaSiguiente}>Siguiente</button>
           )}
       </div>
     </div>
   );
-};
+}

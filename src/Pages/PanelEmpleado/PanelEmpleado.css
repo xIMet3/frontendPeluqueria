@@ -1,8 +1,9 @@
 .vistaEmpleadoEntera {
   width: 100%;
-  max-width: 1200px;
+  max-width: 90vw;
   margin: 0 auto;
   padding: 2em;
+  background-color:rgb(141, 233, 184);
 }
 
 .citas-table {
@@ -18,13 +19,9 @@
 }
 
 .citas-table th {
-  background-color: burlywood;
   font-weight: bold;
 }
 
-.citas-table tr:nth-child(even) {
-  background-color: #d4cece;
-}
 
 .botones-desplegable {
   display: flex;
@@ -57,27 +54,40 @@
   .citas-table th,
   .citas-table td {
     font-size: 0.8em;
-    max-width: none; /* Eliminamos la restricción de ancho máximo */
-    white-space: normal; /* Aseguramos que el texto no se corte */
+    max-width: none; 
+    white-space: normal;
   }
 
   .botones-desplegable {
-    justify-content: center;
+    justify-content: flex-end;
   }
 
   .vistaEmpleadoEntera {
     padding: 1em;
   }
+
+  .filters-container {
+    flex-direction: column;
+  }
+
+  .filter-name {
+    max-width: 100%;
+  }
 }
 
-.estado-pendiente {
-  color: orange;
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 1em;
 }
 
-.estado-cancelada {
-  color: red;
+.filter-date {
+  flex: 1;
 }
 
-.estado-realizada {
-  color: green;
+.filter-name {
+  flex: 1;
+  max-width: 50%;
 }
+

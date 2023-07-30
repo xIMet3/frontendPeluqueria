@@ -1,0 +1,9 @@
+#registerEntera {
+    background-image: url(../../../img/logoJohnson2.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    color: white;
+    height: 100vh;
+    padding: 1em;
+    margin-top: 2em;
+}
