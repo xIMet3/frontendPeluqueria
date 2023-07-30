@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./ModificarCitaEmpleado.css";
 import { modificarCita, mostrarEmpleados, mostrarServicios, obtenerEstadosCita } from "../../../Services/apiCalls";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { userData } from "../userSlice";
 
 export const ModificadorCitaEmpleado = () => {
   const userState = useSelector(userData);
   const token = userState.credentials.token;
+  const navigate = useNavigate();
 
   const location = useLocation();
 
@@ -43,15 +44,37 @@ export const ModificadorCitaEmpleado = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const fechaHora = new Date(`${citaData.fecha}T${citaData.hora}`);
-      citaData.fecha = fechaHora.toISOString();
+      // Construir el objeto con los datos modificados
+      const nuevaCitaData = {
+        id: citaData.id,
+        empleado_id: citaData.empleado_id,
+        fecha: citaData.fecha,
+        hora: citaData.hora,
+        servicio_id: citaData.servicio_id,
+        comentario: citaData.comentario,
+        cita_estado_id: citaData.cita_estado_id,
+      };
 
-      // Agregar el estado seleccionado al objeto citaData antes de enviar la solicitud
-      citaData.cita_estado_id = estadoCita;
+      // Modificar solo los campos que se han rellenado
+      if (citaData.fecha && citaData.hora) {
+        const fechaHora = new Date(`${citaData.fecha}T${citaData.hora}`);
+        nuevaCitaData.fecha = fechaHora.toISOString();
+      }
 
-      await modificarCita(token, citaData);
+      if (estadoCita) {
+        nuevaCitaData.cita_estado_id = estadoCita;
+      }
 
-      // Restablecer los valores del formulario
+      if (citaData.servicio_id) {
+        nuevaCitaData.servicio_id = citaData.servicio_id;
+      }
+
+      if (citaData.comentario) {
+        nuevaCitaData.comentario = citaData.comentario;
+      }
+
+      await modificarCita(token, nuevaCitaData);
+
       setCitaData({
         id: "",
         empleado_id: "",
@@ -61,7 +84,10 @@ export const ModificadorCitaEmpleado = () => {
         comentario: "",
         cita_estado_id: "",
       });
-      setEstadoCita(""); // Restablecer el estado seleccionado a un valor vacío
+      setEstadoCita("");
+
+      // Redireccionar al panel del empleado después de modificar la cita con éxito
+      navigate("/panelEmpleado");
     } catch (error) {
       console.error("Error al modificar la cita:", error);
     }
@@ -98,8 +124,7 @@ export const ModificadorCitaEmpleado = () => {
   const obtenerEstados = async () => {
     try {
       const responseEstadosCita = await obtenerEstadosCita(token);
-      console.log(responseEstadosCita);
-      setEstadosCita(responseEstadosCita.data); // Asignar el array de estados de cita a la variable estadosCita
+      setEstadosCita(responseEstadosCita.data);
     } catch (error) {
       console.log(error);
     }
@@ -116,7 +141,6 @@ export const ModificadorCitaEmpleado = () => {
             name="empleado_id"
             value={citaData.empleado_id}
             onChange={handleChange}
-            required
           >
             <option value="">Selecciona un empleado</option>
             {empleados.map((empleado) => (
@@ -134,7 +158,6 @@ export const ModificadorCitaEmpleado = () => {
             name="fecha"
             value={citaData.fecha}
             onChange={handleChange}
-            required
           />
         </div>
         <div>
@@ -145,7 +168,6 @@ export const ModificadorCitaEmpleado = () => {
             name="hora"
             value={citaData.hora}
             onChange={handleChange}
-            required
           />
         </div>
         <div>
@@ -155,7 +177,6 @@ export const ModificadorCitaEmpleado = () => {
             name="servicio_id"
             value={citaData.servicio_id}
             onChange={handleChange}
-            required
           >
             <option value="">Selecciona un servicio</option>
             {servicios.map((servicio) => (
@@ -173,7 +194,6 @@ export const ModificadorCitaEmpleado = () => {
             name="comentario"
             value={citaData.comentario}
             onChange={handleChange}
-            required
           />
         </div>
         <div>
@@ -183,7 +203,6 @@ export const ModificadorCitaEmpleado = () => {
             name="cita_estado_id"
             value={estadoCita} // Utilizar el estado "estadoCita" para el valor seleccionado
             onChange={handleChange}
-            required
           >
             <option value="">Selecciona un estado de cita</option>
             {estadosCita.map((estado) => (
