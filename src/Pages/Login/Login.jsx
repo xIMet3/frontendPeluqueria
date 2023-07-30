@@ -31,8 +31,8 @@ export const Login = () => {
       dispatch(
         login({
           token: res,
-          name: decoded.name,
-          role_id: decoded.roleId,
+          nombre: decoded.nombre,
+          rol_id: decoded.rolId,
         })
       );
       navigate("/");
