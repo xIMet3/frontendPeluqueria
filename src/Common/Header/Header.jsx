@@ -34,7 +34,7 @@ export const Header = () => {
   const handleUserButtonClick = () => {
     // Redirige al panel del usuario solo si está logeado
     if (isLogeado) {
-      window.location.href = "/panelUsuario";
+      navigate("/panelUsuario");
     }
   };
 
@@ -59,16 +59,20 @@ export const Header = () => {
                 <Boton2 path={"/panelEmpleado"} name={"Panel de Empleado"} />
               </Nav.Link>
             )}
-            <Nav.Link className="text-light">
-              <Boton2 path={"/servicios"} name={"Servicios"} />
-            </Nav.Link>
-            <Nav.Link className="text-light">
-              <Boton2 path={"/panelAdmin"} name={"Panel de Admin"} />
-            </Nav.Link>
             {/* Mostrar botón de Concertar Cita */}
             {isLogeado && (
               <Nav.Link className="text-light">
                 <Boton2 path={"/concertarCita"} name={"Concertar cita"} />
+              </Nav.Link>
+            )}
+            {/* Mostrar botón de Servicios */}
+            <Nav.Link className="text-light">
+              <Boton2 path={"/servicios"} name={"Servicios"} />
+            </Nav.Link>
+            {/* Mostrar botón de Panel de Admin solo si el rol es 1 */}
+            {rolUsuario === 1 && (
+              <Nav.Link className="text-light">
+                <Boton2 path={"/panelAdmin"} name={"Panel de Admin"} />
               </Nav.Link>
             )}
           </Nav>

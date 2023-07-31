@@ -1,54 +1,93 @@
-.panelAdminEntero {
+.vistaEmpleadoEntera {
   width: 100%;
   max-width: 90vw;
   margin: 0 auto;
   padding: 2em;
-  background-color: rgb(237, 238, 237);
+  background-color:rgb(141, 233, 184);
 }
 
-/* Nuevo contenedor para la tabla con scroll horizontal */
-.panelAdminTablaContainer {
-  overflow-x: auto;
-  max-width: 100%; /* Permitir que el contenedor sea más ancho que la pantalla */
-}
-
-.panelAdminTabla {
+.citas-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
 }
 
-.panelAdminTabla th,
-.panelAdminTabla td {
+.citas-table th,
+.citas-table td {
   border: 0.1em solid #dddddd;
-  padding: 1em; /* Aumentamos el tamaño del padding */
+  padding: 0.5em;
   text-align: center;
-  overflow-wrap: break-word;
 }
 
-.panelAdminTabla th {
+.citas-table th {
   font-weight: bold;
 }
 
-#botonEliminarUsuario{
-  border-radius: 0.5em;
+
+.botones-desplegable {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5em;
+}
+
+.botones-desplegable button {
+  margin-left: 0.5em;
+  border-radius: 0.6em;
+}
+
+#botonRealizada {
+  background-color: lightgreen;
+}
+
+#botonCancelar {
   background-color: red;
-  color: white;
+}
+
+#botonModificar {
+  background-color: coral;
+}
+
+#botonOpciones {
+  border-radius: 0.6em;
 }
 
 @media (max-width: 768px) {
+  .citas-table th,
+  .citas-table td {
+    font-size: 0.8em;
+    max-width: none; 
+    white-space: normal;
+  }
 
-  .panelAdminEntero {
+  .botones-desplegable {
+    justify-content: flex-end;
+  }
+
+  .vistaEmpleadoEntera {
     padding: 1em;
   }
 
-  .panelAdminTabla th {
-    width: 10em;
+  .filters-container {
+    flex-direction: column;
   }
 
-  .panelAdminTabla td {
-    height: 3em;
+  .filter-name {
+    max-width: 100%;
   }
 }
 
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 1em;
+}
+
+.filter-date {
+  flex: 1;
+}
+
+.filter-name {
+  flex: 1;
+  max-width: 50%;
+}
 

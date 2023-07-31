@@ -4,60 +4,65 @@
     margin: 0 auto;
     padding: 2em;
     background-color: rgb(237, 238, 237);
-    overflow-x: auto; /* Agregamos el scroll horizontal */
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Nuevo contenedor para la tabla con scroll horizontal */
+  .panelAdminTablaContainer {
+    overflow-x: auto;
+    max-width: 100%; /* Permitir que el contenedor sea más ancho que la pantalla */
   }
   
   .panelAdminTabla {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* Ajuste la tabla a un ancho máximo y distribuye el ancho entre las columnas */
+    table-layout: fixed;
   }
   
   .panelAdminTabla th,
   .panelAdminTabla td {
     border: 0.1em solid #dddddd;
-    padding: 0.5em;
+    padding: 1em; /* Aumentamos el tamaño del padding */
     text-align: center;
-    overflow-wrap: break-word; /* Permite que el contenido se ajuste en varias líneas */
+    overflow-wrap: break-word;
   }
   
   .panelAdminTabla th {
     font-weight: bold;
   }
   
-  .botones-desplegable {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 0.5em;
-  }
-  
-  .botones-desplegable button {
-    margin-left: 0.5em;
-    border-radius: 0.6em;
-    padding: 0.5em 1em;
-    background-color: #ccc;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .botones-desplegable button:hover {
-    background-color: #aaa;
+  #botonEliminarUsuario {
+    border-radius: 0.5em;
+    background-color: red;
+    color: white;
   }
   
   @media (max-width: 768px) {
-    .panelAdminTabla th,
-    .panelAdminTabla td {
+    .panelAdminEntero {
+      padding: 1em;
+    }
+  
+    .panelAdminTabla th {
+      width: 10em;
       font-size: 0.8em;
       max-width: none;
       white-space: normal;
     }
   
-    .botones-desplegable {
-      justify-content: flex-end;
+    .panelAdminTabla td {
+      height: 3em;
+      font-size: 0.8em;
+      max-width: none;
+      white-space: normal;
     }
+  }
   
-    .panelAdminEntero {
-      padding: 1em;
-    }
+  #verCitasAdmin {
+    margin-left: 1em;
+    border-radius: 0.5em;
+    background-color: lightblue;
   }
   

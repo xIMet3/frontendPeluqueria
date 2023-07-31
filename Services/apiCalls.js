@@ -131,8 +131,19 @@ export const obtenerEstadosCita = async (token) => {
   return res.data;
 };
 
+// Obtener todos los usuarios registrados
 export const todosLosUsuarios = async (token) => {
   const res = await axios.get("http://localhost:3000/admin/todosLosUsuarios", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+  return res.data;
+};
+
+// Eliminar un usuario
+export const eliminarUsuario = async (usuarioId, token) => {
+  const res = await axios.delete(`http://localhost:3000/admin/eliminarUsuario/${usuarioId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     }
