@@ -120,7 +120,7 @@ Frontend: https://github.com/xIMet3/frontendPeluqueria
 Backend: https://github.com/xIMet3/backendPeluqueria
 
 ### Agradecimientos 👏
-Gracias a todos los compañeros que me han ayudado en especial a Jesus y Edu que me han apoyado desde el minuto uno.
+Gracias a todos los compañeros que me han ayudado en especial a Jesus, Edu y Carlos que me han ayudado muchísimo y han perdido su tiempo para echarme una mano siempre que lo he necesitado.
 
 ### Estado:
 ### 🚧🚧En desarollo🚧🚧
