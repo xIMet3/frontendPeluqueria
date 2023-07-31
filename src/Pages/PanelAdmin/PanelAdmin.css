@@ -58,6 +58,10 @@
       max-width: none;
       white-space: normal;
     }
+
+    #verCitasAdmin {
+        margin-top: 0.5em;
+    }
   }
   
   #verCitasAdmin {
