@@ -17,8 +17,12 @@ export const Header = () => {
   console.log("Estado de Redux:", usuario);
   const navigate = useNavigate();
   const isLogeado = !!usuario.credentials.token;
-  const nombreUsuario = isLogeado ? jwtDecode(usuario.credentials.token).usuarioId : null; // Lo tengo que cambiar para que aparezca el nombre
-  const rolUsuario = isLogeado ? jwtDecode(usuario.credentials.token).rolId : null;
+  const nombreUsuario = isLogeado
+    ? jwtDecode(usuario.credentials.token).usuarioId
+    : null; // Lo tengo que cambiar para que aparezca el nombre
+  const rolUsuario = isLogeado
+    ? jwtDecode(usuario.credentials.token).rolId
+    : null;
   console.log("rolUsuario:", rolUsuario);
   console.log("nombreusuariooo:", nombreUsuario);
 
@@ -58,6 +62,9 @@ export const Header = () => {
             <Nav.Link className="text-light">
               <Boton2 path={"/servicios"} name={"Servicios"} />
             </Nav.Link>
+            <Nav.Link className="text-light">
+              <Boton2 path={"/panelAdmin"} name={"Panel de Admin"} />
+            </Nav.Link>
             {/* Mostrar botón de Concertar Cita */}
             {isLogeado && (
               <Nav.Link className="text-light">
@@ -69,7 +76,11 @@ export const Header = () => {
             {/* Mostrar boton de Iniciar Sesion o Nombre de usuario */}
             {isLogeado ? (
               <Nav.Link className="text-light" onClick={handleUserButtonClick}>
-                <Boton2 path={"/panelUsuario"} name={nombreUsuario} className="nombreNavbar" />
+                <Boton2
+                  path={"/panelUsuario"}
+                  name={nombreUsuario}
+                  className="nombreNavbar"
+                />
               </Nav.Link>
             ) : (
               <Nav.Link className="text-light">
@@ -80,8 +91,8 @@ export const Header = () => {
             {/* Mostrar botón de Logout o Registrarse */}
             {isLogeado ? (
               <Nav.Link className="text-light" id="botonLogout">
-              <Boton2 onClick={handleLogout} name={"Logout"} />
-            </Nav.Link>
+                <Boton2 onClick={handleLogout} name={"Logout"} />
+              </Nav.Link>
             ) : (
               <Nav.Link className="text-light">
                 <Boton2 path={"/register"} name={"Regístrate"} />

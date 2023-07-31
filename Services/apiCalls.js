@@ -129,5 +129,13 @@ export const obtenerEstadosCita = async (token) => {
   });
   
   return res.data;
-}
+};
 
+export const todosLosUsuarios = async (token) => {
+  const res = await axios.get("http://localhost:3000/admin/todosLosUsuarios", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+  return res.data;
+};

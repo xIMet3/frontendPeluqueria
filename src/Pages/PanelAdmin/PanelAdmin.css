@@ -1,0 +1,63 @@
+.panelAdminEntero {
+    width: 100%;
+    max-width: 90vw;
+    margin: 0 auto;
+    padding: 2em;
+    background-color: rgb(237, 238, 237);
+    overflow-x: auto; /* Agregamos el scroll horizontal */
+  }
+  
+  .panelAdminTabla {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Ajuste la tabla a un ancho máximo y distribuye el ancho entre las columnas */
+  }
+  
+  .panelAdminTabla th,
+  .panelAdminTabla td {
+    border: 0.1em solid #dddddd;
+    padding: 0.5em;
+    text-align: center;
+    overflow-wrap: break-word; /* Permite que el contenido se ajuste en varias líneas */
+  }
+  
+  .panelAdminTabla th {
+    font-weight: bold;
+  }
+  
+  .botones-desplegable {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5em;
+  }
+  
+  .botones-desplegable button {
+    margin-left: 0.5em;
+    border-radius: 0.6em;
+    padding: 0.5em 1em;
+    background-color: #ccc;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .botones-desplegable button:hover {
+    background-color: #aaa;
+  }
+  
+  @media (max-width: 768px) {
+    .panelAdminTabla th,
+    .panelAdminTabla td {
+      font-size: 0.8em;
+      max-width: none;
+      white-space: normal;
+    }
+  
+    .botones-desplegable {
+      justify-content: flex-end;
+    }
+  
+    .panelAdminEntero {
+      padding: 1em;
+    }
+  }
+  
