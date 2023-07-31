@@ -31,27 +31,30 @@ export const Servicios = () => {
   };
 
   return (
-    <div className="serviciosEntera">
-      {servicios.map((servicio) => (
-        <button key={servicio.id} className="servicioItem">
-          <h3>{servicio.nombre_servicio}</h3>
-          <p>Precio: {servicio.precio_servicio}</p>
-          <p>Descripción: {servicio.descripcion}</p>
-        </button>
-      ))}
+    <div className="serviciosBackground">
+      <div className="serviciosEntera">
+        {servicios.map((servicio) => (
+          <button key={servicio.id} className="servicioItem">
+            <h3>{servicio.nombre_servicio}</h3>
+            <p>Precio: {servicio.precio_servicio}</p>
+            <p>Descripción: {servicio.descripcion}</p>
+          </button>
+        ))}
+      </div>
 
       {selectedServiceId && (
         <div className="custom-modal">
           <div className="modal-content">
-            {servicios.map((servicio) => (
-              servicio.id === selectedServiceId && (
-                <div key={servicio.id} id="modalIndividual">
-                  <h2>{servicio.nombre_servicio}</h2>
-                  <p>Precio: {servicio.precio_servicio}</p>
-                  <p>Descripción: {servicio.descripcion}</p>
-                </div>
-              )
-            ))}
+            {servicios.map(
+              (servicio) =>
+                servicio.id === selectedServiceId && (
+                  <div key={servicio.id} id="modalIndividual">
+                    <h2>{servicio.nombre_servicio}</h2>
+                    <p>Precio: {servicio.precio_servicio}</p>
+                    <p>Descripción: {servicio.descripcion}</p>
+                  </div>
+                )
+            )}
           </div>
         </div>
       )}
