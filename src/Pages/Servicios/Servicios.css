@@ -1,0 +1,28 @@
+/* Servicios.css */
+.serviciosEntera {
+  max-width: 100vw;
+  height: 95vh;
+  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1em;
+  padding: 3em;
+  background-image: url(https://images.fresha.com/locations/location-profile-images/40948/643218/2b71d447-b011-41e5-ac2c-a83a8dbd422c.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: white;
+  position: relative;
+}
+
+.servicioItem {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-family: dream-orphans;
+  border-radius: 1em;
+  font-size: large;
+}
+
+@font-face {
+  font-family: dream-orphans;
+  src: url(../../../fonts/dream-orphans/dreamorphans.ttf);
+}

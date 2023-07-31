@@ -7,6 +7,7 @@ import { PanelUsuario } from "../PanelUsuario/PanelUsuario";
 import { PedirCita } from "../PedirCita/PedirCita";
 import { PanelEmpleado } from "../PanelEmpleado/PanelEmpleado";
 import { ModificadorCitaEmpleado } from "../ModificarCitaEmpleado/ModificarCitaEmpleado";
+import { Servicios } from "../Servicios/Servicios";
 
 
 export const Body = () => {
@@ -21,6 +22,7 @@ export const Body = () => {
                 <Route path="/panelUsuario" element={<PanelUsuario />} />
                 <Route path="/panelEmpleado" element={<PanelEmpleado />} />
                 <Route path="/modificadorCitaEmpleado" element={<ModificadorCitaEmpleado />} />
+                <Route path="/servicios" element={<Servicios />} />
             </Routes>
         </>
     )

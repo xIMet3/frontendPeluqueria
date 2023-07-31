@@ -32,7 +32,7 @@ export const Login = () => {
         login({
           token: res,
           nombre: decoded.nombre,
-          rol_id: decoded.rolId,
+          rol_id: decoded.rol_id,
         })
       );
       navigate("/");
