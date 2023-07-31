@@ -1,4 +1,4 @@
-.serviciosBackground {
+.fondoServicios {
     position: fixed;
     top: 0;
     left: 0;
@@ -18,7 +18,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 1em;
-    padding: 3em;
+    padding: 6em;
     color: white;
     position: relative;
   }
@@ -51,7 +51,6 @@
   }
   
   .modal-content {
-    background-color: transparent;
     border: none;
     outline: none;
     color: white;
@@ -60,14 +59,15 @@
   
   /* Pantallas pequeñas */
   @media (max-width: 768px) {
-    .serviciosBackground {
-      background-attachment: fixed; /* Mantenemos el fondo fijo en pantallas pequeñas */
+    .fondoServicios {
+      background-attachment: fixed; 
     }
   
     .serviciosEntera {
       grid-template-columns: 1fr;
       padding: 2em;
-      overflow-y: auto; /* Permitimos el desplazamiento del contenido */
+      overflow-y: auto; 
+      margin-top: 4em;
     }
   
     .servicioItem {
