@@ -116,6 +116,7 @@ Para poder comprobar el funcionamiento puedes logearte como Admin, Empleado y Us
 ###  Repositorio en GitHub 💾
 
 Frontend: https://github.com/xIMet3/frontendPeluqueria
+<br>
 Backend: https://github.com/xIMet3/backendPeluqueria
 
 ### Agradecimientos 👏
