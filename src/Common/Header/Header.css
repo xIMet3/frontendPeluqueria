@@ -1,3 +1,7 @@
 .nombreNavbar {
     color: white;
 }
+
+#botonLogout {
+    margin-left: 2em;
+}

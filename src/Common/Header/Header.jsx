@@ -69,7 +69,6 @@ export const Header = () => {
             {/* Mostrar boton de Iniciar Sesion o Nombre de usuario */}
             {isLogeado ? (
               <Nav.Link className="text-light" onClick={handleUserButtonClick}>
-                {/* Aplica la clase CSS "white-text" al elemento */}
                 <Boton2 path={"/panelUsuario"} name={nombreUsuario} className="nombreNavbar" />
               </Nav.Link>
             ) : (
@@ -80,9 +79,9 @@ export const Header = () => {
 
             {/* Mostrar botón de Logout o Registrarse */}
             {isLogeado ? (
-              <Nav.Link className="text-light">
-                <button onClick={handleLogout}>Logout</button>
-              </Nav.Link>
+              <Nav.Link className="text-light" id="botonLogout">
+              <Boton2 onClick={handleLogout} name={"Logout"} />
+            </Nav.Link>
             ) : (
               <Nav.Link className="text-light">
                 <Boton2 path={"/register"} name={"Regístrate"} />
