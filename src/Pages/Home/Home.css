@@ -5,4 +5,26 @@
   background-repeat: no-repeat;
   background-size: cover;
   overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#carrusel {
+  width: 38em;
+  height: auto;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+#carrusel .imagen-contenedor {
+  width: 100%;
+  height: 100%;
+}
+
+/* Esto asegura que las imágenes dentro del carrusel se muestren completamente sin cambiar su tamaño */
+#carrusel .imagen-contenedor img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ajustar imagen dentro del contenedor sin distorsionar */
 }
