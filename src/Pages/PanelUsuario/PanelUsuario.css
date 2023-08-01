@@ -197,9 +197,20 @@
 }
 
 .estadoCita {
-  color: orange;
   font-size: large;
   font-weight: bold;
+}
+
+.estadoPendiente {
+  color: orange;
+}
+
+.estadoCancelada {
+  color: red;
+}
+
+.estadoRealizada {
+  color: green;
 }
 
 .parteDerecha h2 {
@@ -211,4 +222,15 @@
 .paginationButtons button {
   background-color: rgb(48, 48, 48);
   color: white;
+}
+
+.botonCancelarCita {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.botonCancelarCita button {
+  background-color: red;
+  color: white;
+  border-radius: 0.5em;
 }

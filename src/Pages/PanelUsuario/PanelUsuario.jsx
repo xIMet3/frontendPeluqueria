@@ -3,6 +3,7 @@ import "./PanelUsuario.css"; // Importar el archivo CSS para estilizar el compon
 import { CardUsuario } from "../../Common/CardUsuario/CardUsuario"; // Importar el componente CardUsuario
 import { useSelector } from "react-redux"; // Importar el hook useSelector de Redux
 import { cogerUserData, modificarUsuario, verMisCitas } from "../../../Services/apiCalls"; // Importar funciones para hacer llamadas a la API
+import { modificarCancelarCita } from "../../../Services/apiCalls";
 
 export const PanelUsuario = () => {
   // Estado que almacena los datos del usuario
@@ -159,6 +160,18 @@ export const PanelUsuario = () => {
     setPaginaActual((prevPage) => prevPage - 1);
   };
 
+  const cancelarCita = async (citaId) => {
+    try {
+      // Llama a la API para cambiar el estado de la cita a "Cancelada"
+      await modificarCancelarCita(credentials.token, citaId);
+
+      // Actualiza las citas del usuario en el estado
+      await handleVerMisCitas();
+    } catch (error) {
+      console.error("Error al cancelar la cita: ", error);
+    }
+  };
+
   return (
     <div className="panelUsuarioEntero">
       {/* Parte izquierda: contiene la CardUsuario */}
@@ -179,18 +192,39 @@ export const PanelUsuario = () => {
           {citasPaginadas().map((cita) => (
             <div key={cita.id} className="citaItem">
               <div className="citaItemInfo">
-                <p><strong>{formatoLocalFecha(cita)}</strong></p>
-                <p><strong>Servicio:</strong> {cita.Servicio.nombre_servicio}</p>
-                <p><strong>Empleado:</strong> {cita.Empleado.nombre}</p>
-                <p><strong>Precio:</strong> {cita.Servicio.precio_servicio}</p>
+                <p>
+                  <strong>{formatoLocalFecha(cita)}</strong>
+                </p>
+                <p>
+                  <strong>Servicio:</strong> {cita.Servicio.nombre_servicio}
+                </p>
+                <p>
+                  <strong>Empleado:</strong> {cita.Empleado.nombre}
+                </p>
+                <p>
+                  <strong>Precio:</strong> {cita.Servicio.precio_servicio}
+                </p>
                 <div className="citaItemComentario">
                   <p>
                     <strong>Comentario:</strong> {cita.comentario}
                   </p>
                 </div>
-                <p className="estadoCita">
+                <p
+                  className={`estadoCita ${
+                    cita.Cita_estado.nombre_cita_estado === "Pendiente"
+                      ? "estadoPendiente"
+                      : cita.Cita_estado.nombre_cita_estado === "Cancelada"
+                      ? "estadoCancelada"
+                      : "estadoRealizada"
+                  }`}
+                >
                   {cita.Cita_estado.nombre_cita_estado}
                 </p>
+                {cita.Cita_estado.nombre_cita_estado === "Pendiente" && (
+                  <div className="botonCancelarCita">
+                    <button onClick={() => cancelarCita(cita.id)}>Cancelar</button>
+                  </div>
+                )}
               </div>
             </div>
           ))}
