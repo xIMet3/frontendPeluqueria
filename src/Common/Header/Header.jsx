@@ -1,5 +1,4 @@
-// Header.js
-import React from "react";
+import React, { useState } from "react";
 import "./Header.css";
 import { useDispatch, useSelector } from "react-redux";
 import Container from "react-bootstrap/Container";
@@ -10,27 +9,32 @@ import { Boton1 } from "../Boton1/Boton1";
 import { Boton2 } from "../Boton2/Boton2";
 import jwtDecode from "jwt-decode";
 import { userData, logout } from "../../Pages/userSlice";
+import { useEffect } from "react";
 
 export const Header = () => {
   const dispatch = useDispatch();
   const usuario = useSelector(userData);
-  console.log("Estado de Redux:", usuario);
   const navigate = useNavigate();
   const isLogeado = !!usuario.credentials.token;
-  const nombreUsuario = isLogeado ? usuario.data.nombre : null;
+  const nombreUsuario = isLogeado ? `Hola, ${usuario.data.nombre}` : null;
   const rolUsuario = isLogeado
     ? jwtDecode(usuario.credentials.token).rolId
     : null;
-  console.log("rolUsuario:", rolUsuario);
-  console.log("nombreusuariooo:", nombreUsuario);
 
   const handleLogout = () => {
     // Llama a la accion de logout para limpiar los datos de usuario en el estado
     dispatch(logout());
+    navigate("/login");
   };
+  useEffect(() => {
+    // Redirige a la página de Login despues de cerrar sesion
+    if (!isLogeado) {
+      navigate("/login");
+    }
+  }, [isLogeado]);
 
   const handleUserButtonClick = () => {
-    // Redirige al panel del usuario solo si está logeado
+    // Permite redirigir al panel del usuario solo si esta logeado
     if (isLogeado) {
       navigate("/panelUsuario");
     }
@@ -51,13 +55,13 @@ export const Header = () => {
                 <Boton2 path={"/panelEmpleado"} name={"Panel de Empleado"} />
               </Nav.Link>
             )}
-            {/* Mostrar botón de Concertar Cita */}
+            {/* Mostrar boton de Concertar Cita */}
             {isLogeado && (
               <Nav.Link className="text-light">
                 <Boton2 path={"/concertarCita"} name={"Concertar cita"} />
               </Nav.Link>
             )}
-            {/* Mostrar botón de Servicios */}
+            {/* Mostrar boton de Servicios */}
             <Nav.Link className="text-light">
               <Boton2 path={"/servicios"} name={"Servicios"} />
             </Nav.Link>
@@ -84,9 +88,9 @@ export const Header = () => {
               </Nav.Link>
             )}
 
-            {/* Mostrar botón de Logout o Registrarse */}
+            {/* Mostrar boton de Logout o Registrarse */}
             {isLogeado ? (
-              <Nav.Link className="text-light" id="botonLogout">
+              <Nav.Link className="text-light">
                 <Boton2 onClick={handleLogout} name={"Logout"} />
               </Nav.Link>
             ) : (

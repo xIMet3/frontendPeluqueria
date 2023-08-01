@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./PanelUsuario.css";
 import { CardUsuario } from "../../Common/CardUsuario/CardUsuario";
 import { useSelector } from "react-redux";
-import { cogerUserData, modificarUsuario, verMisCitas } from "../../../Services/apiCalls";
+import {
+  cogerUserData,
+  modificarUsuario,
+  verMisCitas,
+} from "../../../Services/apiCalls";
 import { modificarCancelarCita } from "../../../Services/apiCalls";
+import { useDispatch } from "react-redux";
 
 export const PanelUsuario = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [usuario, setUsuario] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -128,7 +137,7 @@ export const PanelUsuario = () => {
     setPaginaActual((prevPage) => prevPage + 1);
   };
 
-  const handlePreviousPage = () => {
+  const handlePaginaPrevia = () => {
     setPaginaActual((prevPage) => prevPage - 1);
   };
 
@@ -145,7 +154,11 @@ export const PanelUsuario = () => {
     <div className="panelUsuarioEntero">
       <div className="parteIzquierda">
         <div className="cardUsuario">
-          <CardUsuario usuario={usuario} handleAbrirModal={handleAbrirModal} handleVerMisCitas={handleVerMisCitas} />
+          <CardUsuario
+            usuario={usuario}
+            handleAbrirModal={handleAbrirModal}
+            handleVerMisCitas={handleVerMisCitas}
+          />
         </div>
       </div>
       <div className="parteDerecha">
@@ -184,7 +197,9 @@ export const PanelUsuario = () => {
                 </p>
                 {cita.Cita_estado.nombre_cita_estado === "Pendiente" && (
                   <div className="botonCancelarCita">
-                    <button onClick={() => cancelarCita(cita.id)}>Cancelar</button>
+                    <button onClick={() => cancelarCita(cita.id)}>
+                      Cancelar
+                    </button>
                   </div>
                 )}
               </div>
@@ -194,7 +209,7 @@ export const PanelUsuario = () => {
         {citasUsuario.length > citasPorPagina && (
           <div className="paginationButtons">
             {paginaActual > 1 && (
-              <button onClick={handlePreviousPage}>Anterior</button>
+              <button onClick={handlePaginaPrevia}>Anterior</button>
             )}
             {paginaActual < Math.ceil(citasUsuario.length / citasPorPagina) && (
               <button onClick={handleSiguientePagina}>Siguiente</button>
