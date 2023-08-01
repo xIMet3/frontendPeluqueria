@@ -17,9 +17,7 @@ export const Header = () => {
   console.log("Estado de Redux:", usuario);
   const navigate = useNavigate();
   const isLogeado = !!usuario.credentials.token;
-  const nombreUsuario = isLogeado
-    ? jwtDecode(usuario.credentials.token).usuarioId
-    : null; // Lo tengo que cambiar para que aparezca el nombre
+  const nombreUsuario = isLogeado ? usuario.data.nombre : null;
   const rolUsuario = isLogeado
     ? jwtDecode(usuario.credentials.token).rolId
     : null;
@@ -47,12 +45,6 @@ export const Header = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            {/* Mostrar boton de Panel de Usuario */}
-            {isLogeado && (
-              <Nav.Link className="text-light">
-                <Boton2 path={"/panelUsuario"} name={"Panel de usuario"} />
-              </Nav.Link>
-            )}
             {/* Mostrar boton de Panel de Empleado si el rol es 1 o 2 */}
             {(rolUsuario === 1 || rolUsuario === 2) && (
               <Nav.Link className="text-light">
