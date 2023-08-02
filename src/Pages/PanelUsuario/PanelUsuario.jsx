@@ -120,11 +120,22 @@ export const PanelUsuario = () => {
     }
   };
 
-  // Funcion para obtener las citas del usuario
+  // Funcion para obtener las citas del usuario con 2 horas de retraso
   const handleVerMisCitas = async () => {
     try {
       const citas = await verMisCitas(credentials.token);
-      setCitasUsuario(citas);
+
+      // Ajustar la hora de cada cita con 2 horas de retraso
+      const citasConRetraso = citas.map((cita) => {
+        const nuevaFecha = new Date(cita.fecha);
+        nuevaFecha.setHours(nuevaFecha.getHours() - 2);
+        return {
+          ...cita,
+          fecha: nuevaFecha.toISOString(),
+        };
+      });
+
+      setCitasUsuario(citasConRetraso);
     } catch (error) {
       console.error("Error al obtener las citas del usuario: ", error);
     }
@@ -142,6 +153,7 @@ export const PanelUsuario = () => {
     };
     return new Date(cita.fecha).toLocaleString(undefined, options);
   };
+
 
   // Funcion para obtener las citas paginadas en la pagina actual
   const citasPaginadas = () => {

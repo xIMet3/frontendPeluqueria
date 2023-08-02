@@ -158,7 +158,7 @@ export const PedirCita = () => {
               navigate("/panelUsuario");
             }, 1500);
           } else {
-            setError("No hay cita disponible a esa hora");
+            setError("No se pudo reservar la cita");
           }
         })
         .catch((error) => {
