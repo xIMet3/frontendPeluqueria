@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import "./PedirCita.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { crearCita, mostrarEmpleados, mostrarServicios } from "../../../Services/apiCalls";
+import {
+  crearCita,
+  mostrarEmpleados,
+  mostrarServicios,
+  todasLasCitas,
+} from "../../../Services/apiCalls";
 import { userData } from "../userSlice";
 import { Button, Form } from "react-bootstrap";
 
@@ -33,6 +38,12 @@ export const PedirCita = () => {
 
   // Estado para controlar la visibilidad del modal
   const [showModal, setShowModal] = useState(false);
+
+  // Estado para controlar si se ha seleccionado una hora válida
+  const [horaValida, setHoraValida] = useState(true);
+
+  // Estado para verificar si ya existe una cita reservada para la fecha y hora seleccionada
+  const [citaExistente, setCitaExistente] = useState(false);
 
   // Hook de enrutamiento para redireccionar después de enviar el formulario
   const navigate = useNavigate();
@@ -66,26 +77,102 @@ export const PedirCita = () => {
     }
   };
 
+  // Función para verificar si la fecha cumple con los requisitos
+  const isFechaValida = (fecha) => {
+    // Obtener el día de la semana (0: Domingo, 1: Lunes, ..., 6: Sábado)
+    const diaSemana = new Date(fecha).getDay();
+
+    // Obtener la hora seleccionada
+    const horaSeleccionada = new Date(fecha).getHours();
+
+    // Validar el día de la semana y la hora
+    if (diaSemana >= 1 && diaSemana <= 6) {
+      if (
+        (horaSeleccionada >= 9 && horaSeleccionada < 13) ||
+        (horaSeleccionada >= 16 && horaSeleccionada < 20)
+      ) {
+        // Verificar que los minutos sean 00 o 30 (tramos de 30 minutos)
+        const minutosSeleccionados = new Date(fecha).getMinutes();
+        return minutosSeleccionados === 0 || minutosSeleccionados === 30;
+      }
+    }
+
+    return false;
+  };
+
+  // Función para verificar si ya existe una cita reservada para la fecha y hora seleccionada
+  const isCitaExistente = async () => {
+    try {
+      const todasLasCitasRes = await todasLasCitas(credentials.token);
+      const citasArray = Array.isArray(todasLasCitasRes)
+        ? todasLasCitasRes
+        : [];
+      if (citasArray.length > 0) {
+        const citaExistente = citasArray.find(
+          (cita) =>
+            cita.fecha === body.fecha && cita.cita_estado_id !== 2
+        );
+        setCitaExistente(citaExistente !== undefined);
+      } else {
+        setCitaExistente(false); // No hay citas, entonces no existe una cita reservada
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Función para manejar el cambio de valor en el date picker
+  const handleDateChange = (e) => {
+    const fechaSeleccionada = e.target.value;
+    const horaEsValida = isFechaValida(fechaSeleccionada);
+    setHoraValida(horaEsValida);
+    setBody((prevState) => ({
+      ...prevState,
+      fecha: fechaSeleccionada,
+    }));
+  };
+
   // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Verificar si la fecha es válida antes de enviar el formulario
+    if (!isFechaValida(body.fecha)) {
+      setError(
+        "La cita debe ser en tramos de 30 minutos, de 9:00 a 13:00 y de 16:00 a 20:00 de lunes a sábado."
+      );
+      return;
+    }
+
     try {
-      // Llama a la funcion de creacion de cita y maneja la respuesta
+      // Verificar si la cita ya existe antes de intentar crearla
+      const citaExistente = await isCitaExistente();
+      if (citaExistente) {
+        setError("Ya hay una cita reservada en esa fecha y hora.");
+        return;
+      }
+
+      // Si no hay errores, intentar crear la cita
+      setError(""); // Limpiamos el mensaje de error anterior si existía
       crearCita(credentials.token, body)
         .then((res) => {
           if (res.success) {
-            console.log(successMessage)
             setSuccessMessage("Su cita ha sido creada con éxito");
             setTimeout(() => {
               setSuccessMessage(""); // Limpia el mensaje después de un tiempo para que desaparezca
               navigate("/panelUsuario");
             }, 1500);
+          } else {
+            setError("No hay cita disponible a esa hora");
           }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          setError("No hay cita disponible a esa hora");
+        });
     } catch (error) {
       console.log(error);
+      setError("No hay cita disponible a esa hora");
     }
   };
 
@@ -95,12 +182,26 @@ export const PedirCita = () => {
     obtenerServicios();
   }, []);
 
+  // Función para ocultar el mensaje de error después de 3 segundos
+  const hideErrorMessage = () => {
+    setError(""); // Limpiamos el mensaje de error
+  };
+
+  // Hook useEffect para ocultar el mensaje de error después de 3 segundos
+  useEffect(() => {
+    if (error) {
+      const timerId = setTimeout(hideErrorMessage, 3000); // Temporizador de 3 segundos
+      return () => clearTimeout(timerId); // Limpiar el temporizador al desmontar el componente
+    }
+  }, [error]);
+
   return (
     <div className="pedirCitaEntera">
       <div className="formularioCita">
-        {successMessage && 
+        {successMessage && (
           <div className="success-message">{successMessage}</div>
-        }
+        )}
+        {error && <div className="error-message">{error}</div>}
         <h1>Concertar una Cita</h1>
         <Form onSubmit={handleSubmit} id="formularioInputs">
           {/* Espacio para la imagen */}
@@ -114,8 +215,14 @@ export const PedirCita = () => {
             <Form.Control
               type="datetime-local"
               name="fecha"
-              onChange={inputHandler}
+              onChange={handleDateChange}
+              isInvalid={!horaValida || citaExistente}
             />
+            <Form.Control.Feedback type="invalid">
+              {citaExistente
+                ? "Ya existe una cita reservada para la fecha y hora seleccionada."
+                : "La cita debe ser en tramos de 30 minutos, de 9:00 a 13:00 y de 16:00 a 20:00 de lunes a sábado."}
+            </Form.Control.Feedback>
           </Form.Group>
 
           {/* Input para elegir empleado */}
@@ -179,19 +286,3 @@ export const PedirCita = () => {
     </div>
   );
 };
-
-// const isAppointmentExist = appointments.find((appointment) => {
-//     const appointmentDate = new Date(appointment.date);
-//     return (
-//       appointmentDate.getDate() === selectedDateTime.getDate() &&
-//       appointmentDate.getMonth() === selectedDateTime.getMonth() &&
-//       appointmentDate.getFullYear() === selectedDateTime.getFullYear() &&
-//       appointmentDate.getHours() === selectedDateTime.getHours() &&
-//       appointmentDate.getMinutes() === selectedDateTime.getMinutes()
-//     );
-//   });
-
-//   if (isAppointmentExist) {
-//     setError("Ya existe una cita en la fecha y hora especificadas.");
-//     return;
-//   }

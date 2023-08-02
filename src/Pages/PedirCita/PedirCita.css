@@ -29,6 +29,7 @@
 }
 
 #inputFecha,
+#inputHora,
 #inputEmpleado,
 #inputServicio,
 #inputComentario {
@@ -80,6 +81,21 @@
   text-align: center;
   z-index: 9999;
 }
+
+.error-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 0, 0, 0.8);
+  color: white;
+  padding: 1em;
+  border-radius: 0.5em;
+  font-size: 24px; /* Ajusta el tamaño de la fuente según tus preferencias */
+  text-align: center;
+  z-index: 9999;
+}
+
 
 /* Pantallas pequeñas */
 @media (max-width: 576px) {

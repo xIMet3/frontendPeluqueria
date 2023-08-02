@@ -15,7 +15,7 @@
 .parteDerecha {
   width: 65%;
   height: 100%;
-  background-image: url(../../../img/Captura\ desde\ 2023-07-26\ 02-57-08.png);
+  background-image: url(../../../img/logoJohnson1.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -154,7 +154,7 @@
 
   .parteDerecha {
     width: 100%;
-    background-image: url(../../../img/Captura\ desde\ 2023-07-26\ 02-57-08.png);
+    background-image: url(../../../img/logoJohnson1.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -175,7 +175,7 @@
 .citasContainer {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1em;
+  gap: 0.5em;
   margin-top: 2em;
   padding: 1em;
 }
