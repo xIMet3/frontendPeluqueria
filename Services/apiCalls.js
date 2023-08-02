@@ -150,17 +150,3 @@ export const eliminarUsuario = async (usuarioId, token) => {
   });
   return res.data;
 };
-
-// 
-export const eliminarCitasDeUsuario = async (usuarioId, token) => {
-  
-    const res = await axios.delete(`https://backend-peluqueria.vercel.app/admin/eliminarUsuarioConCitas/${usuarioId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return res.data;
-} 
-

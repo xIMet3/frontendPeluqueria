@@ -36,16 +36,16 @@ export const PanelAdmin = () => {
 
   const handleEliminarUsuario = async (usuarioId) => {
     try {
-      // Llamada a la API para eliminar el usuario y todas sus citas
-      const response = await eliminarUsuarioConCitas(usuarioId, token);
+      // Llamada a la API para eliminar el usuario con el ID proporcionado
+      const response = await eliminarUsuario(usuarioId, token);
       if (response.success) {
-        // Si se eliminó el usuario y sus citas exitosamente, actualiza la lista de usuarios
+        // Si se elimino exitosamente actualiza la lista de usuarios
         setUsuarios((prevUsuarios) => prevUsuarios.filter((usuario) => usuario.id !== usuarioId));
       } else {
-        console.error("Error al eliminar el usuario y sus citas:", response);
+        console.error("Error al eliminar el usuario:", response);
       }
     } catch (error) {
-      console.error("Error al eliminar el usuario y sus citas:", error);
+      console.error("Error al eliminar el usuario:", error);
     }
   };
 
