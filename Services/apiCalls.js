@@ -149,4 +149,4 @@ export const eliminarUsuario = async (usuarioId, token) => {
     }
   });
   return res.data;
-};
+}; 
