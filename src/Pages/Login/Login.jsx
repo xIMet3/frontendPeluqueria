@@ -8,26 +8,35 @@ import { useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
-
 export const Login = () => {
+  // Estado local para almacenar los datos del usuario (email y contraseña)
   const [usuario, setUsuario] = useState({
     email: "",
     contraseña: "",
   });
+
+  // Obtenemos la funcion "dispatch" de Redux para enviar acciones al store
   const dispatch = useDispatch();
+  // Hook para redireccionar a otras rutas
   const navigate = useNavigate();
+
+  // Funcion para manejar los cambios en los campos del formulario
   const inputHandler = ({ target }) => {
-    let { name, value } = target;
+    const { name, value } = target;
     setUsuario((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
+  // Funcion para manejar el envio del formulario
   const submitHandler = (e, body) => {
     e.preventDefault();
+    // Llamar a la funcion 'loginUsuario' para enviar los datos del usuario al backend
     loginUsuario(body).then((res) => {
+      // Decodificar el token JWT recibido desde el backend
       let decoded = jwtDecode(res);
+      // Utilizar el action 'login' del slice 'userSlice' para almacenar el token y datos del usuario en el estado global
       dispatch(
         login({
           token: res,
@@ -35,9 +44,11 @@ export const Login = () => {
           rol_id: decoded.rol_id,
         })
       );
+      // Redirige a la pagina de inicio despues del inicio de sesion
       navigate("/");
     });
   };
+
   return (
     <>
       <Container className="loginEntero">
@@ -66,7 +77,8 @@ export const Login = () => {
                   }}
                 />
               </Form.Group>
-              <Button id="boton"
+              <Button
+                id="boton"
                 variant="primary"
                 type="submit"
                 onClick={(e) => {

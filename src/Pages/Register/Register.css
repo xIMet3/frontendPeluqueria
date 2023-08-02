@@ -1,9 +1,22 @@
 #registerEntera {
     background-image: url(../../../img/logoJohnson2.png);
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: 100%; /* En pantallas grandes la imagen ocupa todo el ancho */
     color: white;
     height: 100vh;
     padding: 1em;
     margin-top: 2em;
+   
+}
+
+/* Estilo para pantallas pequeñas */
+@media (max-width: 767px) {
+    #registerEntera {
+        background-size: cover; /* La imagen se ajustará para cubrir todo el fondo */
+        background-position:initial; /* La imagen se centrará en el fondo */
+        display: flex; /* Para hacer que el contenido se distribuya en fila */
+        justify-content: center; /* Centra horizontalmente el contenido */
+        align-items: center; /* Centra verticalmente el contenido */
+        flex-direction: column; /* Alinea el contenido en columna */
+    }
 }

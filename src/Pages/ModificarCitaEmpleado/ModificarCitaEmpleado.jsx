@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "./ModificarCitaEmpleado.css";
-import { modificarCita, mostrarEmpleados, mostrarServicios, obtenerEstadosCita } from "../../../Services/apiCalls";
+import {
+  modificarCita,
+  mostrarEmpleados,
+  mostrarServicios,
+  obtenerEstadosCita,
+} from "../../../Services/apiCalls";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { userData } from "../userSlice";
 
 export const ModificadorCitaEmpleado = () => {
+  // Obtiene el estado del usuario desde el store de Redux
   const userState = useSelector(userData);
   const token = userState.credentials.token;
   const navigate = useNavigate();
 
+  // Obtenemos la ubicacion actual para obtener los datos de la cita a modificar
   const location = useLocation();
 
+  // Estado local para almacenar los datos de la cita a modificar
   const [citaData, setCitaData] = useState({
     id: location.state?.id || "",
     empleado_id: location.state?.empleado_id || "",
@@ -22,17 +30,20 @@ export const ModificadorCitaEmpleado = () => {
     cita_estado_id: location.state?.cita_estado_id || "",
   });
 
-  const [estadoCita, setEstadoCita] = useState(""); // Nuevo estado para almacenar el estado seleccionado
+  // Nuevo estado para almacenar el estado seleccionado
+  const [estadoCita, setEstadoCita] = useState("");
 
   // Estados para almacenar la lista de empleados, servicios y estados de cita
   const [empleados, setEmpleados] = useState([]);
   const [servicios, setServicios] = useState([]);
   const [estadosCita, setEstadosCita] = useState([]);
 
+  // Funcion que maneja los cambios en los campos de entrada
   const handleChange = (event) => {
     const { name, value } = event.target;
     if (name === "cita_estado_id") {
-      setEstadoCita(value); // Guardar el estado seleccionado en el estado "estadoCita"
+      // Guardar el estado seleccionado en el estado "estadoCita"
+      setEstadoCita(value); 
     } else {
       setCitaData((prevData) => ({
         ...prevData,
@@ -41,10 +52,11 @@ export const ModificadorCitaEmpleado = () => {
     }
   };
 
+  // Funcion que se ejecuta al enviar el formulario
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      // Construir el objeto con los datos modificados
+      // Construye el objeto con los datos modificados
       const nuevaCitaData = {
         id: citaData.id,
         empleado_id: citaData.empleado_id,
@@ -55,7 +67,7 @@ export const ModificadorCitaEmpleado = () => {
         cita_estado_id: citaData.cita_estado_id,
       };
 
-      // Modificar solo los campos que se han rellenado
+      // Modifica solo los campos que se han rellenado
       if (citaData.fecha && citaData.hora) {
         const fechaHora = new Date(`${citaData.fecha}T${citaData.hora}`);
         nuevaCitaData.fecha = fechaHora.toISOString();
@@ -73,8 +85,10 @@ export const ModificadorCitaEmpleado = () => {
         nuevaCitaData.comentario = citaData.comentario;
       }
 
+      // Llama a la funcion de API para modificar la cita
       await modificarCita(token, nuevaCitaData);
 
+      // Limpiar los datos del formulario y el estado del estadoCita
       setCitaData({
         id: "",
         empleado_id: "",
@@ -86,7 +100,7 @@ export const ModificadorCitaEmpleado = () => {
       });
       setEstadoCita("");
 
-      // Redireccionar al panel del empleado después de modificar la cita con éxito
+      // Redirecciona al panel del empleado despues de modificar la cita con éxito
       navigate("/panelEmpleado");
     } catch (error) {
       console.error("Error al modificar la cita:", error);
@@ -100,7 +114,7 @@ export const ModificadorCitaEmpleado = () => {
     obtenerEstados();
   }, []);
 
-  // Función para cargar la lista de empleados
+  // Funcion para cargar la lista de empleados
   const obtenerEmpleados = async () => {
     try {
       const responseEmpleados = await mostrarEmpleados();
@@ -110,7 +124,7 @@ export const ModificadorCitaEmpleado = () => {
     }
   };
 
-  // Función para cargar la lista de servicios
+  // Funcion para cargar la lista de servicios
   const obtenerServicios = async () => {
     try {
       const responseServicios = await mostrarServicios();
@@ -135,7 +149,9 @@ export const ModificadorCitaEmpleado = () => {
       <h1>Modificar Cita</h1>
       <form className="formulario" onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="empleadoId"><strong>Empleado:</strong></label>
+          <label htmlFor="empleadoId">
+            <strong>Empleado:</strong>
+          </label>
           <select
             id="empleadoId"
             name="empleado_id"
@@ -151,7 +167,9 @@ export const ModificadorCitaEmpleado = () => {
           </select>
         </div>
         <div>
-          <label htmlFor="nuevaFecha"><strong>Nueva Fecha:</strong></label>
+          <label htmlFor="nuevaFecha">
+            <strong>Nueva Fecha:</strong>
+          </label>
           <input
             type="date"
             id="nuevaFecha"
@@ -161,7 +179,9 @@ export const ModificadorCitaEmpleado = () => {
           />
         </div>
         <div>
-          <label htmlFor="nuevaHora"><strong>Nueva Hora:</strong></label>
+          <label htmlFor="nuevaHora">
+            <strong>Nueva Hora:</strong>
+          </label>
           <input
             type="time"
             id="nuevaHora"
@@ -171,7 +191,9 @@ export const ModificadorCitaEmpleado = () => {
           />
         </div>
         <div>
-          <label htmlFor="nuevoServicio"><strong>Nuevo Servicio:</strong></label>
+          <label htmlFor="nuevoServicio">
+            <strong>Nuevo Servicio:</strong>
+          </label>
           <select
             id="nuevoServicio"
             name="servicio_id"
@@ -187,7 +209,9 @@ export const ModificadorCitaEmpleado = () => {
           </select>
         </div>
         <div>
-          <label htmlFor="nuevoComentario"><strong>Nuevo Comentario:</strong></label>
+          <label htmlFor="nuevoComentario">
+            <strong>Nuevo Comentario:</strong>
+          </label>
           <input
             type="text"
             id="nuevoComentario"
@@ -197,7 +221,9 @@ export const ModificadorCitaEmpleado = () => {
           />
         </div>
         <div>
-          <label htmlFor="nuevoEstado"><strong>Nuevo Estado:</strong></label>
+          <label htmlFor="nuevoEstado">
+            <strong>Nuevo Estado:</strong>
+          </label>
           <select
             id="nuevoEstado"
             name="cita_estado_id"

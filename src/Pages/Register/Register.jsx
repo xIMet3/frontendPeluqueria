@@ -1,53 +1,58 @@
 import React from "react";
 import "./Register.css";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Container, Row, Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { registroUsuario } from "../../../Services/apiCalls";
-
+import { useNavigate } from "react-router-dom";
 
 export const Register = () => {
-  const [usuario, setUser] = useState({
+  // Estado local para almacenar los datos del usuario
+  const initialState = {
     nombre: "",
     apellido: "",
     email: "",
     telefono: "",
     codigo_postal: "",
     contraseña: "",
-  });
-
-  const dispatch = useDispatch();
+  };
+  // Utiliza el estado "usuario" y la función "setUser" para actualizarlo
+  const [usuario, setUser] = useState(initialState);
+  // Hook  para redireccionar a otras rutas
   const navigate = useNavigate();
+
+  // Funcion para manejar los cambios en los campos del formulario
   const inputHandler = ({ target }) => {
-    let { name, value } = target;
+    const { name, value } = target;
     setUser((prevState) => ({
       ...prevState,
       [name]: value,
     }));
-    console.log(usuario)
   };
 
+  // Funcion para manejar el envio del formulario
   const submitHandler = async (e) => {
-  e.preventDefault();
-  // Validar número de teléfono antes de enviarlo al backend
-  if (usuario.telefono.length !== 9) {
-    alert("Porfavor, introduce un número de telefono válido (9 digitos)");
-    return;
-  }
-  try {
-    const response = await registroUsuario(usuario);
-    // Aquí puedes manejar la respuesta del backend si es necesario
-    console.log(response);
-  } catch (error) {
-    // Manejo de errores en caso de que la solicitud falle
-    console.error("Error al registrar el usuario:", error);
-  }
-};
-
-  
+    e.preventDefault();
+    // Valida el numero de telefono antes de enviarlo al backend
+    if (usuario.telefono.length !== 9) {
+      alert("Porfavor, introduce un número de telefono válido (9 digitos)");
+      return;
+    }
+    try {
+      // Llamar a la funcion 'registroUsuario' para enviar los datos del usuario al backend
+      const res = await registroUsuario(usuario);
+      console.log(res);
+      // Limpia el formulario despues del registro
+      setUser(initialState);
+      // Redirige a la página de inicio de sesion
+      navigate("/login");
+    } catch (error) {
+      // Manejo de errores en caso de que la solicitud falle
+      console.error("Error al registrar el usuario:", error);
+    }
+  };
 
   return (
     <>

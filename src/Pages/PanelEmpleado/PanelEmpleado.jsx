@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./PanelEmpleado.css";
 import { useSelector } from "react-redux";
-import { todasLasCitas, modificarCancelarCita, modificarCitaRealizada } from "../../../Services/apiCalls";
+import {
+  todasLasCitas,
+  modificarCancelarCita,
+  modificarCitaRealizada,
+} from "../../../Services/apiCalls";
 import { useNavigate } from "react-router-dom";
 
 export const PanelEmpleado = () => {
@@ -149,12 +153,11 @@ export const PanelEmpleado = () => {
   const handleModificarCita = async (citaId) => {
     try {
       navigate(path, { state: { id: citaId } });
-
     } catch (error) {
       console.error("Error al modificar la cita:", error);
     }
   };
-  
+
   return (
     <div className="vistaEmpleadoEntera">
       <h1>Todas las citas existentes:</h1>
@@ -210,7 +213,9 @@ export const PanelEmpleado = () => {
                       <td>{fechaLocal}</td>
                       <td>{horaLocal}</td>
                       <td>
-                        <strong style={{ color: 'darkred' }}>{nombreCompleto}</strong>
+                        <strong style={{ color: "darkred" }}>
+                          {nombreCompleto}
+                        </strong>
                       </td>
                       <td>{cita.Usuario?.telefono}</td>
                       <td>{cita.Empleado?.nombre}</td>
@@ -279,7 +284,8 @@ export const PanelEmpleado = () => {
             ) : (
               <tr>
                 <td colSpan="10">
-                  No se encontraron citas para la fecha y el nombre seleccionados.
+                  No se encontraron citas para la fecha y el nombre
+                  seleccionados.
                 </td>
               </tr>
             )}
@@ -288,7 +294,9 @@ export const PanelEmpleado = () => {
       </div>
       {/* Paginación */}
       <div className="pagination">
-        {paginaActual > 1 && <button onClick={handlePaginaAnterior}>Anterior</button>}
+        {paginaActual > 1 && (
+          <button onClick={handlePaginaAnterior}>Anterior</button>
+        )}
         {citasFiltradas.length > citasPorPagina &&
           paginaActual < Math.ceil(citasFiltradas.length / citasPorPagina) && (
             <button onClick={handlePaginaSiguiente}>Siguiente</button>
@@ -296,4 +304,4 @@ export const PanelEmpleado = () => {
       </div>
     </div>
   );
-}
+};

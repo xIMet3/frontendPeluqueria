@@ -2,12 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./PedirCita.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  crearCita,
-  mostrarEmpleados,
-  mostrarServicios,
-  todasLasCitas,
-} from "../../../Services/apiCalls";
+import { crearCita, mostrarEmpleados, mostrarServicios, todasLasCitas } from "../../../Services/apiCalls";
 import { userData } from "../userSlice";
 import { Button, Form } from "react-bootstrap";
 
@@ -39,16 +34,16 @@ export const PedirCita = () => {
   // Estado para controlar la visibilidad del modal
   const [showModal, setShowModal] = useState(false);
 
-  // Estado para controlar si se ha seleccionado una hora válida
+  // Estado para controlar si se ha seleccionado una hora valida
   const [horaValida, setHoraValida] = useState(true);
 
   // Estado para verificar si ya existe una cita reservada para la fecha y hora seleccionada
   const [citaExistente, setCitaExistente] = useState(false);
 
-  // Hook de enrutamiento para redireccionar después de enviar el formulario
+  // Hook de enrutamiento para redireccionar despues de enviar el formulario
   const navigate = useNavigate();
 
-  // Función para manejar el cambio de valor en los campos del formulario
+  // Funcion para manejar el cambio de valor en los campos del formulario
   const inputHandler = ({ target }) => {
     let { name, value } = target;
     setBody((prevState) => ({
@@ -57,7 +52,7 @@ export const PedirCita = () => {
     }));
   };
 
-  // Función para cargar la lista de empleados al montar el componente
+  // Funcion para cargar la lista de empleados al montar el componente
   const obtenerEmpleados = async () => {
     try {
       const responseEmpleados = await mostrarEmpleados();
@@ -67,7 +62,7 @@ export const PedirCita = () => {
     }
   };
 
-  // Función para cargar la lista de servicios al montar el componente
+  // Funcion para cargar la lista de servicios al montar el componente
   const obtenerServicios = async () => {
     try {
       const responseServicios = await mostrarServicios();
@@ -77,15 +72,15 @@ export const PedirCita = () => {
     }
   };
 
-  // Función para verificar si la fecha cumple con los requisitos
+  // Funcion para verificar si la fecha cumple con los requisitos
   const isFechaValida = (fecha) => {
-    // Obtener el día de la semana (0: Domingo, 1: Lunes, ..., 6: Sábado)
+    // Obtener el dia de la semana (0: Domingo, 1: Lunes, ..., 6: Sabado)
     const diaSemana = new Date(fecha).getDay();
 
     // Obtener la hora seleccionada
     const horaSeleccionada = new Date(fecha).getHours();
 
-    // Validar el día de la semana y la hora
+    // Validar el dia de la semana y la hora
     if (diaSemana >= 1 && diaSemana <= 6) {
       if (
         (horaSeleccionada >= 9 && horaSeleccionada < 13) ||
@@ -100,7 +95,7 @@ export const PedirCita = () => {
     return false;
   };
 
-  // Función para verificar si ya existe una cita reservada para la fecha y hora seleccionada
+  // Funcion para verificar si ya existe una cita reservada para la fecha y hora seleccionada
   const isCitaExistente = async () => {
     try {
       const todasLasCitasRes = await todasLasCitas(credentials.token);
@@ -109,8 +104,7 @@ export const PedirCita = () => {
         : [];
       if (citasArray.length > 0) {
         const citaExistente = citasArray.find(
-          (cita) =>
-            cita.fecha === body.fecha && cita.cita_estado_id !== 2
+          (cita) => cita.fecha === body.fecha && cita.cita_estado_id !== 2
         );
         setCitaExistente(citaExistente !== undefined);
       } else {
@@ -121,7 +115,7 @@ export const PedirCita = () => {
     }
   };
 
-  // Función para manejar el cambio de valor en el date picker
+  // Funcion para manejar el cambio de valor en el date picker
   const handleDateChange = (e) => {
     const fechaSeleccionada = e.target.value;
     const horaEsValida = isFechaValida(fechaSeleccionada);
@@ -132,11 +126,11 @@ export const PedirCita = () => {
     }));
   };
 
-  // Función para manejar el envío del formulario
+  // Funcion para manejar el envio del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Verificar si la fecha es válida antes de enviar el formulario
+    // Verificar si la fecha es valida antes de enviar el formulario
     if (!isFechaValida(body.fecha)) {
       setError(
         "La cita debe ser en tramos de 30 minutos, de 9:00 a 13:00 y de 16:00 a 20:00 de lunes a sábado."
@@ -153,13 +147,14 @@ export const PedirCita = () => {
       }
 
       // Si no hay errores, intentar crear la cita
-      setError(""); // Limpiamos el mensaje de error anterior si existía
+      setError(""); // Limpia el mensaje de error anterior si existe
       crearCita(credentials.token, body)
         .then((res) => {
           if (res.success) {
             setSuccessMessage("Su cita ha sido creada con éxito");
             setTimeout(() => {
-              setSuccessMessage(""); // Limpia el mensaje después de un tiempo para que desaparezca
+              // Limpia el mensaje despues de un tiempo para que desaparezca
+              setSuccessMessage(""); 
               navigate("/panelUsuario");
             }, 1500);
           } else {
@@ -182,16 +177,18 @@ export const PedirCita = () => {
     obtenerServicios();
   }, []);
 
-  // Función para ocultar el mensaje de error después de 3 segundos
+  // Funcion para ocultar el mensaje de error despues de 3 segundos
   const hideErrorMessage = () => {
-    setError(""); // Limpiamos el mensaje de error
+    setError(""); // Limpia el mensaje de error
   };
 
-  // Hook useEffect para ocultar el mensaje de error después de 3 segundos
+  // Hook useEffect para ocultar el mensaje de error despues de 3 segundos
   useEffect(() => {
     if (error) {
-      const timerId = setTimeout(hideErrorMessage, 3000); // Temporizador de 3 segundos
-      return () => clearTimeout(timerId); // Limpiar el temporizador al desmontar el componente
+      // Temporizador de 3 segundos
+      const timerId = setTimeout(hideErrorMessage, 3000); 
+      // Limpia el temporizador al desmontar el componente
+      return () => clearTimeout(timerId); 
     }
   }, [error]);
 

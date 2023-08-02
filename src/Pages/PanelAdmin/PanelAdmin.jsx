@@ -5,8 +5,11 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export const PanelAdmin = () => {
+  // Estado local para almacenar la lista de usuarios
   const [usuarios, setUsuarios] = useState([]);
+  // Estado local para almacenar el filtro por nombre
   const [filtroNombre, setFiltroNombre] = useState("");
+  // Obtiene el token del usuario desde la store Redux
   const token = useSelector((state) => state.usuario.credentials.token);
   const navigate = useNavigate();
 
@@ -14,10 +17,10 @@ export const PanelAdmin = () => {
     // Llamada a la API para obtener los usuarios
     const obtenerUsuarios = async () => {
       try {
-        // Obtener los usuarios registrados
+        // Obtiene los usuarios registrados
         const response = await todosLosUsuarios(token);
 
-        // Verificar si la respuesta es exitosa y si contiene la propiedad "data"
+        // Verifica si la respuesta es exitosa y si contiene la propiedad "data"
         if (response.success) {
           setUsuarios(response.data);
         } else {
@@ -36,7 +39,7 @@ export const PanelAdmin = () => {
       // Llamada a la API para eliminar el usuario con el ID proporcionado
       const response = await eliminarUsuario(usuarioId, token);
       if (response.success) {
-        // Si se eliminó exitosamente, actualizamos la lista de usuarios
+        // Si se elimino exitosamente actualiza la lista de usuarios
         setUsuarios((prevUsuarios) => prevUsuarios.filter((usuario) => usuario.id !== usuarioId));
       } else {
         console.error("Error al eliminar el usuario:", response);
@@ -47,13 +50,16 @@ export const PanelAdmin = () => {
   };
 
   const handleVerTodasLasCitas = () => {
+    // Redirecciona a la pagina del panel de empleado
     navigate("/panelEmpleado");
   };
 
   const handleFiltrarPorNombre = (e) => {
+    // Actualiza el estado de filtroNombre con el valor del campo de entrada
     setFiltroNombre(e.target.value);
   };
 
+  // Filtra la lista de usuarios por el nombre
   const usuariosFiltrados = usuarios.filter((usuario) =>
     usuario.nombre.toLowerCase().includes(filtroNombre.toLowerCase())
   );
