@@ -2,18 +2,18 @@ import axios from "axios";
 
 // Registro usuario
 export const registroUsuario = async (body) => {
-  return await axios.post("http://localhost:3000/auth/registro", body);
+  return await axios.post("https://backend-peluqueria.vercel.app/auth/registro", body);
 };
 
 // Login usuario
 export const loginUsuario = async (body) => {
-  const res = await axios.post("http://localhost:3000/auth/login", body);
+  const res = await axios.post("https://backend-peluqueria.vercel.app/auth/login", body);
   return res.data.token;
 };
 
 // Mostrar perfil usuario
 export const cogerUserData = async (token) => {
-  const res = await axios.get("http://localhost:3000/usuario/perfilUsuario", {
+  const res = await axios.get("https://backend-peluqueria.vercel.app/usuario/perfilUsuario", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -24,7 +24,7 @@ export const cogerUserData = async (token) => {
 // Modificar perfil usuario
 export const modificarUsuario = async (token, userData) => {
   const res = await axios.put(
-    "http://localhost:3000/usuario/modificarPerfil",
+    "https://backend-peluqueria.vercel.app/usuario/modificarPerfil",
     userData,
     {
       headers: {
@@ -39,7 +39,7 @@ export const modificarUsuario = async (token, userData) => {
 // Solicitar una cita
 export const crearCita = async (token, citaData) => {
   const res = await axios.post(
-    "http://localhost:3000/cita/solicitarCita",
+    "https://backend-peluqueria.vercel.app/cita/solicitarCita",
     citaData,
     {
       headers: {
@@ -52,19 +52,19 @@ export const crearCita = async (token, citaData) => {
 
 // Traer los empleados
 export const mostrarEmpleados = async () => {
-  const res = await axios.get("http://localhost:3000/usuario/verEmpleados");
+  const res = await axios.get("https://backend-peluqueria.vercel.app/usuario/verEmpleados");
   return res.data;
 };
 
 // Traer todos los servicios
 export const mostrarServicios = async () => {
-  const res = await axios.get("http://localhost:3000/usuario/verServicios");
+  const res = await axios.get("https://backend-peluqueria.vercel.app/usuario/verServicios");
   return res.data;
 };
 
 // Ver mis citas como usuario
 export const verMisCitas = async (token) => {
-  const res = await axios.get("http://localhost:3000/cita/misCitas", {
+  const res = await axios.get("https://backend-peluqueria.vercel.app/cita/misCitas", {
     headers: {
       Authorization: `Bearer ${token}`,
     }
@@ -74,7 +74,7 @@ export const verMisCitas = async (token) => {
 
 // Ver todas las citas como empleado y admin
 export const todasLasCitas = async (token, citaData) => {
-  const res = await axios.get("http://localhost:3000/empleado/todasLasCitas", {
+  const res = await axios.get("https://backend-peluqueria.vercel.app/empleado/todasLasCitas", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -85,7 +85,7 @@ export const todasLasCitas = async (token, citaData) => {
 // Cambiar estado de la cita a Cancelada
 export const modificarCancelarCita = async (token, citaId) => {
     const res = await axios.put(
-      `http://localhost:3000/empleado/modificarCita/${citaId}`,
+      `https://backend-peluqueria.vercel.app/empleado/modificarCita/${citaId}`,
       { cita_estado_id: 2 }, // Aqui modifica el estado de la cita a 2 (Cancelada)
       {
         headers: {
@@ -99,7 +99,7 @@ export const modificarCancelarCita = async (token, citaId) => {
 // Cambiar el estado de la cita a Realizada
 export const modificarCitaRealizada = async (token, citaId) => {
   const res = await axios.put(
-    `http://localhost:3000/empleado/modificarCita/${citaId}`,
+    `https://backend-peluqueria.vercel.app/empleado/modificarCita/${citaId}`,
     { cita_estado_id: 3 }, // Aqui modifica el estado de la cita a 3 (Realizada)
     {
       headers: {
@@ -112,7 +112,7 @@ export const modificarCitaRealizada = async (token, citaId) => {
 
 // Modificar cita
 export const modificarCita = async (token, citaData) => {
-  const res = await axios.put(`http://localhost:3000/empleado/modificarCita/${citaData.id}`, citaData, {
+  const res = await axios.put(`https://backend-peluqueria.vercel.app/empleado/modificarCita/${citaData.id}`, citaData, {
     headers: {
       Authorization:`Bearer ${token}`,
     },
@@ -122,7 +122,7 @@ export const modificarCita = async (token, citaData) => {
 
 // Obtener todos los estados de las citas
 export const obtenerEstadosCita = async (token) => {
-  const res = await axios.get("http://localhost:3000/empleado/obtenerEstados", {
+  const res = await axios.get("https://backend-peluqueria.vercel.app/empleado/obtenerEstados", {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -133,7 +133,7 @@ export const obtenerEstadosCita = async (token) => {
 
 // Obtener todos los usuarios registrados
 export const todosLosUsuarios = async (token) => {
-  const res = await axios.get("http://localhost:3000/admin/todosLosUsuarios", {
+  const res = await axios.get("https://backend-peluqueria.vercel.app/admin/todosLosUsuarios", {
     headers: {
       Authorization: `Bearer ${token}`,
     }
@@ -143,7 +143,7 @@ export const todosLosUsuarios = async (token) => {
 
 // Eliminar un usuario
 export const eliminarUsuario = async (usuarioId, token) => {
-  const res = await axios.delete(`http://localhost:3000/admin/eliminarUsuario/${usuarioId}`, {
+  const res = await axios.delete(`https://backend-peluqueria.vercel.app/admin/eliminarUsuario/${usuarioId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     }
