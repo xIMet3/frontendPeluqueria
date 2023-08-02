@@ -85,7 +85,7 @@ export const todasLasCitas = async (token, citaData) => {
 // Cambiar estado de la cita a Cancelada
 export const modificarCancelarCita = async (token, citaId) => {
     const res = await axios.put(
-      `https://backend-peluqueria.vercel.app/empleado/modificarCita/${citaId}`,
+      `https://backend-peluqueria.vercel.app/empleado/cancelarCita/${citaId}`,
       { cita_estado_id: 2 }, // Aqui modifica el estado de la cita a 2 (Cancelada)
       {
         headers: {
