@@ -1,307 +1,319 @@
-import React, { useEffect, useState } from "react";
-import "./PanelEmpleado.css";
-import { useSelector } from "react-redux";
-import {
-  todasLasCitas,
-  modificarCancelarCita,
-  modificarCitaRealizada,
-} from "../../../Services/apiCalls";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "./PanelUsuario.css";
+import { CardUsuario } from "../../Common/CardUsuario/CardUsuario";
+import { useSelector } from "react-redux";
+import { cogerUserData, modificarUsuario, verMisCitas } from "../../../Services/apiCalls";
+import { modificarCancelarCita } from "../../../Services/apiCalls";
+import { useDispatch } from "react-redux";
 
-export const PanelEmpleado = () => {
-  const [citas, setCitas] = useState([]);
-  const [estadoDesplegable, setEstadoDesplegable] = useState({});
-  const [filterDate, setFilterDate] = useState("");
-  const [filtroNombre, setFiltroNombre] = useState("");
-  const [paginaActual, setPaginaActual] = useState(1);
-  const citasPorPagina = 20;
-  const token = useSelector((state) => state.usuario.credentials.token);
+export const PanelUsuario = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Estado local para almacenar los datos del usuario
+  const [usuario, setUsuario] = useState({});
+  // Estado local para controlar la visibilidad del modal de modificacion de datos
+  const [showModal, setShowModal] = useState(false);
+  // Estado local para almacenar los datos del formulario
+  const [formData, setFormData] = useState({
+    nombre: "",
+    apellido: "",
+    email: "",
+    telefono: "",
+    codigo_postal: "",
+    contraseña: "",
+  });
+  // Estado local para gestionar los errores de contraseña
+  const [contraseñaError, setContraseñaError] = useState("");
+  // Estado local para almacenar las citas del usuario
+  const [citasUsuario, setCitasUsuario] = useState([]);
+  // Estado local para controlar la paginacion de las citas
+  const [paginaActual, setPaginaActual] = useState(1);
+  // Constante para establecer el numero de citas por pagina
+  const citasPorPagina = 6;
+
+  // Obtener los datos de usuario desde la tienda Redux
+  const { credentials = {} } = useSelector((state) => state.usuario);
 
   // Efecto de montaje del componente
   useEffect(() => {
-    obtenerTodasLasCitas();
-  }, []);
+    // Funcion asincronica para obtener los datos del usuario y establecer el estado local
+    const verPerfilUsuario = async () => {
+      try {
+        const userData = await cogerUserData(credentials.token);
+        setUsuario(userData.data);
+        setFormData({
+          nombre: userData.data?.nombre || "",
+          apellido: userData.data?.apellido || "",
+          email: userData.data?.email || "",
+          telefono: userData.data?.telefono || "",
+          codigo_postal: userData.data?.codigo_postal || "",
+          contraseña: "",
+        });
+      } catch (error) {
+        console.error("Error al obtener los datos del usuario: ", error);
+      }
+    };
+    verPerfilUsuario();
+  }, [credentials.token]);
 
-  // Funcion para obtener todas las citas
-  const obtenerTodasLasCitas = async () => {
+  // Funcion para abrir el modal de modificacion de datos
+  const handleAbrirModal = () => {
+    setShowModal(true);
+  };
+
+  // Funcion para cerrar el modal de modificación de datos
+  const handleCerrarModal = () => {
+    setShowModal(false);
+  };
+
+  // Funcion para manejar el cambio de los campos del formulario
+  const handleCambio = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  // Funcion para guardar los cambios realizados en el formulario
+  const guardarCambios = async () => {
     try {
-      const citasData = await todasLasCitas(token);
-      setCitas(citasData.data);
+      // Objeto con los datos del usuario a modificar
+      const userDataToUpdate = {
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        email: formData.email,
+        telefono: formData.telefono,
+        codigo_postal: formData.codigo_postal,
+      };
+
+      if (formData.contraseña && formData.contraseña.length >= 6) {
+        userDataToUpdate.contraseña = formData.contraseña;
+        setContraseñaError("");
+      } else if (formData.contraseña && formData.contraseña.length < 6) {
+        setContraseñaError("La contraseña debe tener al menos 6 caracteres");
+        return;
+      } else {
+        setContraseñaError("Introduzca su contraseña o su nueva contraseña");
+        return;
+      }
+
+      // Llamada a la API para modificar los datos del usuario
+      await modificarUsuario(credentials.token, userDataToUpdate);
+
+      // Actualizar el estado local con los nuevos datos del usuario
+      setUsuario({
+        ...usuario,
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        email: formData.email,
+        telefono: formData.telefono,
+        codigo_postal: formData.codigo_postal,
+      });
+
+      // Cerrar el modal despues de guardar los cambios
+      handleCerrarModal();
     } catch (error) {
-      console.error("Error al obtener las citas:", error);
+      console.error("Error al guardar los cambios: ", error);
     }
   };
 
-  // Funcion para formatear la fecha y hora
-  const formatearFecha = (fecha) => {
-    const fechaLocal = new Date(fecha).toLocaleDateString();
-    const horaLocal = new Date(fecha).toLocaleTimeString();
-    return { fechaLocal, horaLocal };
-  };
+  // Funcion para obtener las citas del usuario con 2 horas de retraso
+  const handleVerMisCitas = async () => {
+    try {
+      const citas = await verMisCitas(credentials.token);
 
-  // Funcion para alternar el estado del menu desplegable de cada cita
-  const desplegable = (citaId) => {
-    setEstadoDesplegable((prevState) => ({
-      ...prevState,
-      [citaId]: !prevState[citaId],
-    }));
-  };
+      // Ajustar la hora de cada cita con 2 horas de retraso
+      const citasConRetraso = citas.map((cita) => {
+        const nuevaFecha = new Date(cita.fecha);
+        nuevaFecha.setHours(nuevaFecha.getHours() - 2);
+        return {
+          ...cita,
+          fecha: nuevaFecha.toISOString(),
+        };
+      });
 
-  // Funcion para filtrar las citas por fecha
-  const filtrarCitasPorFecha = (cita) => {
-    if (!filterDate) {
-      return true;
-    }
-
-    const fechaCita = new Date(cita.fecha);
-    const diaCita = fechaCita.getDate();
-    const mesCita = fechaCita.getMonth() + 1;
-    const añoCita = fechaCita.getFullYear();
-    const fechaFormateada = `${añoCita}-${mesCita
-      .toString()
-      .padStart(2, "0")}-${diaCita.toString().padStart(2, "0")}`;
-    return fechaFormateada === filterDate;
-  };
-
-  // Funcion para filtrar las citas por nombre
-  const filtrarCitasPorNombre = (cita) => {
-    if (!filtroNombre) {
-      return true;
-    }
-    const nombreUsuario = cita.Usuario?.nombre.toLowerCase();
-    const nombreFiltrado = filtroNombre.toLowerCase();
-    return nombreUsuario.includes(nombreFiltrado);
-  };
-
-  // Funcion para manejar el cambio del filtro por fecha
-  const handleFiltroFecha = (event) => {
-    setFilterDate(event.target.value);
-    setPaginaActual(1); // Restablece la pagina actual a 1
-  };
-
-  // Funcion para manejar el cambio del filtro por nombre
-  const handleFiltroNombre = (event) => {
-    const inputName = event.target.value;
-    if (inputName.length <= 40) {
-      setFiltroNombre(inputName);
-      setPaginaActual(1); // Restablece la pagina actual a 1
+      setCitasUsuario(citasConRetraso);
+    } catch (error) {
+      console.error("Error al obtener las citas del usuario: ", error);
     }
   };
 
-  // Funcion para manejar el botón de pagina siguiente
-  const handlePaginaSiguiente = () => {
-    const totalPages = Math.ceil(citasFiltradas.length / citasPorPagina);
-    if (paginaActual < totalPages) {
-      setPaginaActual((prevPage) => prevPage + 1);
-    }
+  // Funcion para formatear la fecha en formato local
+  const formatoLocalFecha = (cita) => {
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    };
+    return new Date(cita.fecha).toLocaleString(undefined, options);
   };
 
-  // Funcion para manejar el boton de pagina anterior
-  const handlePaginaAnterior = () => {
+  // Funcion para obtener las citas paginadas en la pagina actual
+  const citasPaginadas = () => {
+    const indexOfLastCita = paginaActual * citasPorPagina;
+    const indexOfFirstCita = indexOfLastCita - citasPorPagina;
+    return citasUsuario.slice(indexOfFirstCita, indexOfLastCita);
+  };
+
+  // Funcion para manejar el botón de siguiente página en la paginacion
+  const handleSiguientePagina = () => {
+    setPaginaActual((prevPage) => prevPage + 1);
+  };
+
+  // Funcion para manejar el botón de pagina previa en la paginacion
+  const handlePaginaPrevia = () => {
     setPaginaActual((prevPage) => prevPage - 1);
   };
 
-  // Calculo del indice de la ultima cita mostrada y la primera cita mostrada en la pagina actual
-  const indexUltimaCita = paginaActual * citasPorPagina;
-  const indexPrimeraCita = indexUltimaCita - citasPorPagina;
-
-  // Filtro de fecha y filtro de nombre
-  const citasFiltradas = citas
-    .filter(filtrarCitasPorFecha)
-    .filter(filtrarCitasPorNombre);
-
-  // Obtener las citas que se mostraran en la pagina actual
-  const citasPaginadas = citasFiltradas.slice(
-    indexPrimeraCita,
-    indexUltimaCita
-  );
-
-  // Funcion para manejar el botón de cancelar cita
-  const handleCancelarCita = async (citaId, estado) => {
+  // Funcion para cancelar una cita
+  const cancelarCita = async (citaId) => {
     try {
-      if (estado === "Cancelada") {
-        await modificarCancelarCita(token, citaId);
-        // Una vez se haya modificado, actualiza el estado local
-        setCitas((prevCitas) =>
-          prevCitas.map((cita) =>
-            cita.id === citaId
-              ? { ...cita, Cita_estado: { nombre_cita_estado: "Cancelada" } }
-              : cita
-          )
-        );
-      } else if (estado === "Realizada") {
-        await modificarCitaRealizada(token, citaId);
-        // Una vez se haya marcado como realizada, actualiza el estado local
-        setCitas((prevCitas) =>
-          prevCitas.map((cita) =>
-            cita.id === citaId
-              ? { ...cita, Cita_estado: { nombre_cita_estado: "Realizada" } }
-              : cita
-          )
-        );
-      }
+      await modificarCancelarCita(credentials.token, citaId);
+      await handleVerMisCitas();
     } catch (error) {
-      console.error("Error al modificar la cita:", error);
-    }
-  };
-
-  // Ruta de la vista ModificadorCitaEmpleado
-  const path = "/modificadorCitaEmpleado";
-
-  // Funcion para redirigir a la vista ModificadorCitaEmpleado con la id de la cita seleccionada para modificar
-  const handleModificarCita = async (citaId) => {
-    try {
-      navigate(path, { state: { id: citaId } });
-    } catch (error) {
-      console.error("Error al modificar la cita:", error);
+      console.error("Error al cancelar la cita: ", error);
     }
   };
 
   return (
-    <div className="vistaEmpleadoEntera">
-      <h1>Todas las citas existentes:</h1>
-      <div className="filters-container">
-        {/* Filtro por fecha */}
-        <div className="filter-date">
-          <label htmlFor="fechaFilter">Filtrar por fecha:</label>
-          <input
-            type="date"
-            id="fechaFilter"
-            value={filterDate}
-            onChange={handleFiltroFecha}
-          />
-        </div>
-        {/* Filtro por nombre */}
-        <div className="filter-name">
-          <label htmlFor="nombreFilter">Filtrar por nombre: </label>
-          <input
-            type="text"
-            id="nombreFilter"
-            value={filtroNombre}
-            onChange={handleFiltroNombre}
+    <div className="panelUsuarioEntero">
+      <div className="parteIzquierda">
+        <div className="cardUsuario">
+          {/* Componente CardUsuario para mostrar los datos del usuario */}
+          <CardUsuario
+            usuario={usuario}
+            handleAbrirModal={handleAbrirModal}
+            handleVerMisCitas={handleVerMisCitas}
           />
         </div>
       </div>
-      {/* Tabla de citas */}
-      <div className="table-responsive">
-        <table className="table table-bordered citas-table">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Hora</th>
-              <th>Usuario</th>
-              <th>Teléfono</th>
-              <th>Empleado</th>
-              <th>Servicio</th>
-              <th>Precio</th>
-              <th>Comentario</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* Si hay citas filtradas para mostrar */}
-            {citasFiltradas.length > 0 ? (
-              citasPaginadas.map((cita) => {
-                const { fechaLocal, horaLocal } = formatearFecha(cita.fecha);
-                const nombreCompleto = `${cita.Usuario?.nombre} ${cita.Usuario?.apellido}`;
-
-                return (
-                  <React.Fragment key={cita.id}>
-                    <tr>
-                      <td>{fechaLocal}</td>
-                      <td>{horaLocal}</td>
-                      <td>
-                        <strong style={{ color: "darkred" }}>
-                          {nombreCompleto}
-                        </strong>
-                      </td>
-                      <td>{cita.Usuario?.telefono}</td>
-                      <td>{cita.Empleado?.nombre}</td>
-                      <td>{cita.Servicio?.nombre_servicio}</td>
-                      <td>{cita.Servicio?.precio_servicio}</td>
-                      <td>{cita.comentario}</td>
-                      <td
-                        style={{
-                          color:
-                            cita.Cita_estado?.nombre_cita_estado === "Pendiente"
-                              ? "orange"
-                              : cita.Cita_estado?.nombre_cita_estado ===
-                                "Cancelada"
-                              ? "red"
-                              : cita.Cita_estado?.nombre_cita_estado ===
-                                "Realizada"
-                              ? "green"
-                              : "black",
-                        }}
-                      >
-                        {cita.Cita_estado?.nombre_cita_estado}
-                      </td>
-                      <td>
-                        <button
-                          onClick={() => desplegable(cita.id)}
-                          id="botonOpciones"
-                        >
-                          Opciones
-                        </button>
-                      </td>
-                    </tr>
-                    {/* Despliegue de opciones */}
-                    {estadoDesplegable[cita.id] && (
-                      <tr>
-                        <td colSpan="10">
-                          <div className="botones-desplegable">
-                            <button
-                              id="botonModificar"
-                              onClick={() => handleModificarCita(cita.id)}
-                            >
-                              Modificar
-                            </button>
-                            <button
-                              id="botonCancelar"
-                              onClick={() =>
-                                handleCancelarCita(cita.id, "Cancelada")
-                              }
-                            >
-                              Cancelar
-                            </button>
-                            <button
-                              id="botonRealizada"
-                              onClick={() =>
-                                handleCancelarCita(cita.id, "Realizada")
-                              }
-                            >
-                              Realizada
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </React.Fragment>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan="10">
-                  No se encontraron citas para la fecha y el nombre
-                  seleccionados.
-                </td>
-              </tr>
+      <div className="parteDerecha">
+        <h2>Mis Citas</h2>
+        <div className="citasContainer">
+          {citasPaginadas().map((cita) => (
+            <div key={cita.id} className="citaItem">
+              <div className="citaItemInfo">
+                <p>
+                  <strong>{formatoLocalFecha(cita)}</strong>
+                </p>
+                <p>
+                  <strong>Servicio:</strong> {cita.Servicio.nombre_servicio}
+                </p>
+                <p>
+                  <strong>Empleado:</strong> {cita.Empleado.nombre}
+                </p>
+                <p>
+                  <strong>Precio:</strong> {cita.Servicio.precio_servicio}
+                </p>
+                <div className="citaItemComentario">
+                  <p>
+                    <strong>Comentario:</strong> {cita.comentario}
+                  </p>
+                </div>
+                {/* Mostrar el estado de la cita */}
+                <p
+                  className={`estadoCita ${
+                    cita.Cita_estado.nombre_cita_estado === "Pendiente"
+                      ? "estadoPendiente"
+                      : cita.Cita_estado.nombre_cita_estado === "Cancelada"
+                      ? "estadoCancelada"
+                      : "estadoRealizada"
+                  }`}
+                >
+                  {cita.Cita_estado.nombre_cita_estado}
+                </p>
+                {/* Mostrar botón para cancelar cita si está pendiente */}
+                {cita.Cita_estado.nombre_cita_estado === "Pendiente" && (
+                  <div className="botonCancelarCita">
+                    <button onClick={() => cancelarCita(cita.id)}>
+                      Cancelar
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Mostrar botones de paginacion si hay mas citas que el numero de citas por pagina */}
+        {citasUsuario.length > citasPorPagina && (
+          <div className="paginationButtons">
+            {paginaActual > 1 && (
+              <button onClick={handlePaginaPrevia}>Anterior</button>
             )}
-          </tbody>
-        </table>
-      </div>
-      {/* Paginación */}
-      <div className="pagination">
-        {paginaActual > 1 && (
-          <button onClick={handlePaginaAnterior}>Anterior</button>
+            {paginaActual < Math.ceil(citasUsuario.length / citasPorPagina) && (
+              <button onClick={handleSiguientePagina}>Siguiente</button>
+            )}
+          </div>
         )}
-        {citasFiltradas.length > citasPorPagina &&
-          paginaActual < Math.ceil(citasFiltradas.length / citasPorPagina) && (
-            <button onClick={handlePaginaSiguiente}>Siguiente</button>
-          )}
       </div>
+      {/* Mostrar el modal para modificar los datos del usuario */}
+      {showModal && (
+        <div className="modalUsuario">
+          <div className="modal-contenido">
+            <span className="cerrar" onClick={handleCerrarModal}>
+              &times;
+            </span>
+            <h2>Modificar Datos</h2>
+            <form>
+              <label>Nombre:</label>
+              <input
+                type="text"
+                name="nombre"
+                value={formData.nombre}
+                onChange={handleCambio}
+              />
+              <label>Apellidos:</label>
+              <input
+                type="text"
+                name="apellido"
+                value={formData.apellido}
+                onChange={handleCambio}
+              />
+              <label>Email:</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleCambio}
+              />
+              <label>Teléfono:</label>
+              <input
+                type="text"
+                name="telefono"
+                value={formData.telefono}
+                onChange={handleCambio}
+              />
+              <label>Código Postal:</label>
+              <input
+                type="text"
+                name="codigo_postal"
+                value={formData.codigo_postal}
+                onChange={handleCambio}
+              />
+              <label>Contraseña:</label>
+              <input
+                type="password"
+                name="contraseña"
+                value={formData.contraseña}
+                onChange={handleCambio}
+              />
+              {/* Mostrar mensaje de error si hay un problema con la contraseña */}
+              {contraseñaError && (
+                <p className="error-message">{contraseñaError}</p>
+              )}
+              <button type="button" onClick={guardarCambios}>
+                Guardar cambios
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
