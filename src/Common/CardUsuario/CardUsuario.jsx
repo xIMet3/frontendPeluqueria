@@ -1,11 +1,12 @@
 import React from "react";
 import "./CardUsuario.css";
+import imagen1 from "../../../img/iconoUsuario.png"
 
 export const CardUsuario = ({ usuario, handleAbrirModal, handleVerMisCitas }) => {
   return (
     <div className="cardCustom d-flex justify-content-center">
       <div className="card" id="card">
-        <img src="../../../img/iconoUsuario.png" className="card-img-top" />
+        <img src={imagen1} className="card-img-top" />
         <div className="card-body">
           <h5 className="card-titulo">
             <strong>Nombre:</strong> {usuario?.nombre}
