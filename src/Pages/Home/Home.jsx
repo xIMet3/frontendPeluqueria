@@ -9,9 +9,11 @@ import imagen2 from "../../../img/carrusel2.png";
 import imagen3 from "../../../img/carrusel3.png";
 import imagen4 from "../../../img/carrusel4.png";
 import imagen5 from "../../../img/carrusel5.png";
-import imagen6 from "../../../img/johnsonExclusiveYellow.jpeg";
+import imagen6 from "../../../img/carrusel6.png";
+import imagen7 from "../../../img/carrusel7.png";
+import imagen8 from "../../../img/johnsonExclusiveYellow.jpeg";
 
-const imagenes = [imagen1, imagen2, imagen3, imagen4, imagen5, imagen6];
+const imagenes = [imagen1, imagen2, imagen3, imagen4, imagen5, imagen6, imagen7, imagen8];
 
 export const Home = () => {
   return (
