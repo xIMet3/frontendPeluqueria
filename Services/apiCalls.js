@@ -154,7 +154,7 @@ export const eliminarUsuario = async (usuarioId, token) => {
 // 
 export const eliminarCitasDeUsuario = async (usuarioId, token) => {
   
-    const res = await axios.delete(`https://backend-peluqueria.vercel.app/admin/eliminarCitasDeUsuario/${usuarioId}`,
+    const res = await axios.delete(`https://backend-peluqueria.vercel.app/admin/eliminarUsuarioConCitas/${usuarioId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
