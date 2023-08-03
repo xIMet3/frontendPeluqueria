@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./PanelAdmin.css";
-import { todosLosUsuarios, eliminarUsuario } from "../../../Services/apiCalls";
+import { todosLosUsuarios, eliminarUsuarioConCitas } from "../../../Services/apiCalls";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -36,10 +36,10 @@ export const PanelAdmin = () => {
 
   const handleEliminarUsuario = async (usuarioId) => {
     try {
-      // Llamada a la API para eliminar el usuario con el ID proporcionado
-      const response = await eliminarUsuario(usuarioId, token);
+      // Llamada a la API para eliminar el usuario y sus citas asociadas con el ID proporcionado
+      const response = await eliminarUsuarioConCitas(usuarioId, token);
       if (response.success) {
-        // Si se elimino exitosamente actualiza la lista de usuarios
+        // Si se eliminó exitosamente, actualiza la lista de usuarios
         setUsuarios((prevUsuarios) => prevUsuarios.filter((usuario) => usuario.id !== usuarioId));
       } else {
         console.error("Error al eliminar el usuario:", response);
@@ -48,6 +48,7 @@ export const PanelAdmin = () => {
       console.error("Error al eliminar el usuario:", error);
     }
   };
+  
 
   const handleVerTodasLasCitas = () => {
     // Redirecciona a la pagina del panel de empleado
