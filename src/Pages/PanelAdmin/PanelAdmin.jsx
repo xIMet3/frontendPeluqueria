@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./PanelAdmin.css";
-import { todosLosUsuarios, eliminarUsuarioConCitas } from "../../../Services/apiCalls";
+import { todosLosUsuarios, eliminarUsuario } from "../../../Services/apiCalls";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
